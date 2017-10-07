@@ -1,0 +1,92 @@
+#1
+pwd
+
+#2
+ls -all
+
+#3
+ls -a
+
+#4
+ls -R
+
+#5
+mkdir /home/temp
+
+#6
+ln /etc/passwd ~/fred
+
+#7
+rmdir -p test
+
+#8
+chmod =r
+
+#9
+chmod u=r
+
+#10
+chmod =rwx
+
+#11
+umask 077
+
+#12
+chmod =rxu
+
+#13
+which ping
+
+#14
+file /tmp/hacker-leftover
+
+#15
+strings /tmp/hacker-leftover
+
+#16
+grep ‘dood’
+
+#17
+grep ‘dood\|haxor3d’
+
+#18
+grep -i ‘owned’
+
+#19
+find -mtime 7
+
+#20
+find -perm 4700
+
+#21
+locate ‘tape’
+
+#22
+find -name “*.txt” ‘qbert’
+
+#23
+
+
+#24
+
+
+#25
+top -user
+
+#26
+ps $$
+
+#27
+top -a
+
+#28
+top 
+
+#29
+nice
+
+#30
+signal
+
+#31
+kill -SIGSTOP

@@ -1,0 +1,6 @@
+INDEX VERSION 1.129+/Users/Eidolon/Developer/Information Retrieval/.metadata/.plugins/org.eclipse.jdt.core
+323712830.index
+1242641668.index
+1486635216.index
+1043322149.index
+2525130864.index

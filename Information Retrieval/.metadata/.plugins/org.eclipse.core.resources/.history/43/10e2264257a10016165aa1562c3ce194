@@ -1,0 +1,26 @@
+package ranking;
+
+import java.util.HashMap;
+import java.util.Set;
+
+import containers.PostingList;
+import containers.Query;
+
+public class ProbabilisticModel {
+	private HashMap<String, PostingList> index;
+	private HashMap<String, Query> queries;
+	private Set<String> documents;
+	
+	private int N;	// number of documents in index
+	
+	public ProbabilisticModel(HashMap<String, PostingList> _index, HashMap<String, Query> _queries, Set<String> docs) {
+		index = _index;
+		queries = _queries;
+		documents = docs;
+		N = documents.size();
+	}
+	
+	public void BM25() {
+	
+	}
+}

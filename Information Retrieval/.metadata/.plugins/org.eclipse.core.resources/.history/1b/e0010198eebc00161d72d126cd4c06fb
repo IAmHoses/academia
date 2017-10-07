@@ -1,0 +1,7 @@
+package exceptions;
+
+public class QueryReformationConfiguration extends Exception {
+	public QueryReformationConfiguration(String message) {
+		super (message);
+	}
+}

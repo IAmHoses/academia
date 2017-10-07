@@ -1,0 +1,21 @@
+package scheduling;
+
+import java.util.LinkedList;
+
+public class Main {
+	
+	LinkedList<Process> processes; 
+
+	public static void main (String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+	
+	public Main () {
+		
+	}
+	
+	private void loadProcesses () {
+		
+	}
+}

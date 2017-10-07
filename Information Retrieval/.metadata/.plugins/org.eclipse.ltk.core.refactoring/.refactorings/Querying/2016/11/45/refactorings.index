@@ -1,0 +1,51 @@
+1478042036459	Rename type 'VectorSpace'
+1478104592359	Rename resource 'resources'
+1478120794253	Delete element
+1478121031377	Delete element
+1478121538236	Delete element
+1478125891230	Delete element
+1478126209977	Move compilation unit
+1478133770267	Delete element
+1478133847097	Delete element
+1478134006730	Delete element
+1478142498791	Delete element
+1478143073449	Delete element
+1478143117466	Delete element
+1478143584553	Delete element
+1478145431298	Delete element
+1478145519710	Delete element
+1478146871967	Delete element
+1478146900177	Delete element
+1478151135737	Delete element
+1478186042802	Rename package 'ranking'
+1478186065896	Rename type 'RelevanceRanker'
+1478186076095	Rename package 'dynamic_ranking'
+1478186085768	Rename type 'DynamicRanker'
+1478201042334	Delete element
+1478201045265	Delete element
+1478201827994	Delete element
+1478202329433	Delete element
+1478203856274	Delete element
+1478204453936	Rename type 'LanguageModel'
+1478204462338	Rename type 'VectorSpaceModel'
+1478204468800	Rename type 'ProbabilisticModel'
+1478213709778	Rename type 'DynamicVectorSpaceModel'
+1478216378739	Delete elements
+1478216380908	Delete element
+1478219701492	Rename type 'DynamicBM25'
+1478220818987	Delete element
+1478224571724	Delete element
+1478225438200	Delete element
+1478273973374	Delete element
+1478273976227	Delete elements
+1478274068707	Delete element
+1478274227884	Delete element
+1478274271988	Delete element
+1478274288797	Delete element
+1478274335067	Delete element
+1478275350085	Delete elements
+1478275364017	Move files
+1478277569893	Delete element
+1478277846846	Delete element
+1478280895282	Delete element
+1478282323660	Delete element

@@ -1,0 +1,36 @@
+> final.best	// "best" model for multiple regression
+
+         GDP per Capita Sanitation Urban   Rsq Adj Rsq      Cp
+1  ( 1 )                         *       0.651   0.649 101.696
+2  ( 1 )              *          *       0.778   0.775   6.425
+3  ( 1 )              *          *     * 0.784    0.78       4
+
+---------------------------------------------------------------------------------
+
+> vif(final.multicolin1)
+
+Call:
+lm(formula = final$GDP.per.Capita ~ final$Sanitation + final$Urban, data=final)
+
+final$Sanitation      final$Urban
+        1.454579         1.454579
+
+---------------------------------------------------------------------------------
+
+> vif(final.multicolin2)
+
+Call:
+lm(formula = final$Sanitation ~ final$GDP.per.Capita + final$Urban, data=final)
+
+final$GDP.per.Capita          final$Urban
+            1.512697             1.512697
+
+---------------------------------------------------------------------------------
+
+> vif(final.multicolin3)
+
+Call:
+lm(formula = final$Urban ~ final$GDP.per.Capita + final$Sanitation, data=final)
+
+final$GDP.per.Capita     final$Sanitation
+            1.360436             1.360436

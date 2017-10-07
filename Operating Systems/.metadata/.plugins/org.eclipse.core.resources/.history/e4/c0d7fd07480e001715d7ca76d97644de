@@ -1,0 +1,13 @@
+package scheduling;
+
+public class RoundRobin {
+	private Integer timeQuantum;
+	
+	public RoundRobin (Integer timeQuantum) {
+		this.timeQuantum = timeQuantum;
+	}
+	
+	public void schedule () {
+		
+	}
+}

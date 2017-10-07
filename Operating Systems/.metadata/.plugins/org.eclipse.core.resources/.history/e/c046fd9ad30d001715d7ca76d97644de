@@ -1,0 +1,45 @@
+package scheduling;
+
+import java.util.LinkedList;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.io.BufferedReader;
+import java.io.IOException;
+
+// all main does is load processes and bootstrap the scheduling algorithm
+
+public class Master { 
+
+	public static void main (String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+	
+	public Master () {
+		LinkedList<Process> processes = loadProcesses();
+	}
+	
+	private LinkedList<Process> loadProcesses () {
+		LinkedList<Process> processes = new LinkedList<Process>();
+		
+		int processID = 1;
+		
+		while (true) {
+			String file = "process-" + processID + ".txt";
+			Charset charset = Charset.forName("US-ASCII");
+			
+			try (BufferedReader reader = Files.newBufferedReader(file, charset)) {
+			    String line = null;
+			    while ((line = reader.readLine()) != null) {
+			        System.out.println(line);
+			    }
+			} catch (IOException x) {
+			    break;
+			}
+			
+			processID++;
+		}
+		
+		return processes;
+	}
+}

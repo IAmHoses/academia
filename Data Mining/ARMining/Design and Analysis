@@ -1,0 +1,84 @@
+/************************
+ * 						*
+ *  Design and Analysis *
+ *						*
+ ************************/
+ 
+Design:
+
+load_dataset()
+	imports all transactions from file small_basket.dat
+
+load_inventory()
+	Imports all items in file products
+
+generate_item_frequencies()
+	Scans database transactions and calculates frequences for
+	itemsets of size k = 1. These frequencies are stored for
+	future use in calculating confidences and lifts
+
+generate_C1()
+	generates a set of all size k = 1 itemsets which meet the
+	minimum support requirement. This set is generated before
+	the while-loop of the apriori algoritm begins
+
+self_join_apriori_itemset()
+	self-joins size-(k-1) itemsets to create a pre-pruned set 
+	of size k itemsets. This is accomplished combinatorially,
+	while utilizing the standard union function
+
+generate_subset_family()
+	within the algorithm, this function is utilized for generating 
+	"k choose (k-1)" subset families. These subset families are 
+	then used for the pruning process, where in if any of the (k-1) 
+	subsets are not in Lk-1, it is pruned from the list of size-k 
+	candidates
+
+prune_self_joined_itemset()
+	using the last two methods, this function goes through
+	the joined itemset and prunes it. Additionally, lifts
+	are calculated for each itemset and further pruned
+	if their correlation is negative (lift < 1)
+
+generate_candidates()
+	ties together self_join_apriori_itemset() and
+	prune_self_joined_itemset() to easily produce
+	a pruned list of candidates
+
+computes_supports()
+	generates a dictionary of supports for a list of candidates
+
+compute_confidences()
+	generates a dictionary of confidences for a list of candidates
+
+compute_lifts()
+	generates a dictionary of confidences for a list of pre-pruned
+	itemsets
+
+return_frequent_itemsets_and_rules()
+	serves as a driver function for generating k-item candidate
+	itemsets, scanning the database to find itemsets with sufficient 
+	support, and generating association rules. Output is also 
+	generated in this driver function
+
+main.py
+	full implementation of the apriori algorithm. Utilizes
+	a while loop for k > 1 to size-(k+1) candidate lists
+	and association rules. Terminates when there are no more 
+	frequent itemsets to be generated 
+
+--------------------------------------------------------------------
+
+Analysis:
+
+I found that a minimum confidence of 0.5 was required to generate
+any meaningful rules. Else, a store looking to optimize their
+product layout would not gain too much from grouping the associated
+items together. Additionally, I found that a minimum support of
+0.42 was nice for trimming items that customers just so happened
+to buy a lot of (paper towels, cereal, etc). These products
+have obvious complements (cleaning supplies, milk, etc). When 
+the minimum support was higher, we got more interesting items
+like avacados and pineapple juice. From these extremely popular
+non-necessity items, we could find rules that were less general
+to a given population

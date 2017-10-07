@@ -1,0 +1,51 @@
+package scheduling;
+
+import java.util.LinkedList;
+
+public class Process {
+	private LinkedList<Subprocess> subprocesses;
+	private Integer startTime;
+	private Integer endTime;
+	private Boolean started;
+	private Boolean idle;
+	
+	public Process (Integer startTime) {
+		subprocesses = new LinkedList<Subprocess>();
+		this.startTime = startTime;
+		endTime = startTime;
+		started = false;
+		idle = false;
+	}
+	
+	public LinkedList<Subprocess> getSubprocesses () {
+		return subprocesses;
+	}
+	
+	public Boolean hasStarted () {
+		return started;
+	}
+	
+	public Boolean isIdle () {
+		return idle;
+	}
+	
+	public void addSubprocess (Subprocess subprocess) {
+		subprocesses.add(subprocess);
+	}
+	
+	public void startProcess () {
+		started = true;
+	}
+	
+	public void sleep () {
+		idle = true;
+	}
+	
+	public void awaken () {
+		idle = false;
+	}
+	
+	public void subtractTime (Integer difference) {
+		subprocesses.getFirst().subtractTime(difference);
+	}
+}

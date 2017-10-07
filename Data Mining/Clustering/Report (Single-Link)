@@ -1,0 +1,82 @@
+k = 5 (Single-Link Distance)
+Time: 82.4
+
+Sum Squared Error: 682150.2956394047
+Min Cluster Distance: 3.309829634709124
+Max Cluster Distance: 5.7204832835290516
+
+Min Cluster Size: 1
+Max Cluster Size: 44506
+Average Cluster Size: 11179.25
+
+Accuracy: 0.2240534919605519
+Macro Average Precision: 0.7419942787134555
+Micro Average Precision: 0.2240534919605519
+
+--------------------------------------------
+
+k = 10 (Single-Link Distance)
+Time: 83.6
+
+Sum Squared Error: 878647.1416992579
+Min Cluster Distance: 2.721942266442821
+Max Cluster Distance: 5.108620906988772
+
+Min Cluster Size: 1
+Max Cluster Size: 44507
+Average Cluster Size: 4968.555555555556
+
+Accuracy: 0.7782722454547487
+Macro Average Precision: 0.9480048949330419
+Micro Average Precision: 0.7782722454547487
+
+--------------------------------------------
+
+k = 15 (Single-Link Distance)
+Time: 86.7s
+
+Sum Squared Error: 643294.6104885238
+Min Cluster Distance: 2.5174393879528756
+Max Cluster Distance: 7.112284133765944
+
+Min Cluster Size: 1
+Max Cluster Size: 44506
+Average Cluster Size: 3194.0714285714284
+
+Accuracy: 0.22476910347295212
+Macro Average Precision: 0.9313020853872488
+Micro Average Precision: 0.22476910347295212
+
+--------------------------------------------
+
+k = 20 (Single-Link Distance) - BEST RUN
+Time: 89.0s
+
+Sum Squared Error: 588587.8922777202
+Min Cluster Distance: 2.4027122098459004
+Max Cluster Distance: 6.4589115891255835
+
+Min Cluster Size: 1
+Max Cluster Size: 44506
+Average Cluster Size: 2353.5263157894738
+
+Accuracy: 0.7783616968937987
+Macro Average Precision: 0.9754513313205947
+Micro Average Precision: 0.7783616968937987
+
+--------------------------------------------
+
+k = 25 (Single-Link Distance)
+Time: 91.7s
+
+Sum Squared Error: 473502.5295008093
+Min Cluster Distance: 2.3954498825123967
+Max Cluster Distance: 7.903755491851151
+
+Min Cluster Size: 1
+Max Cluster Size: 44506
+Average Cluster Size: 1863.2083333333333
+
+Accuracy: 0.22221973746002638
+Macro Average Precision: 0.9336530227356422
+Micro Average Precision: 0.22221973746002638

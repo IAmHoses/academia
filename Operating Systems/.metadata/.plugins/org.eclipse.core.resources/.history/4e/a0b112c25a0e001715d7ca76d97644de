@@ -1,0 +1,18 @@
+package scheduling;
+
+import java.util.LinkedList;
+
+public class RoundRobin {
+	private Integer timeQuantum;
+	private LinkedList<Process> processes;
+	private Integer totalTime;
+	
+	public RoundRobin (Integer timeQuantum, LinkedList<Process> processes) {
+		this.timeQuantum = timeQuantum;
+		totalTime = 0;
+	}
+	
+	public void schedule () {
+		
+	}
+}

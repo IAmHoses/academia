@@ -1,0 +1,63 @@
+package static_ranking;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import containers.PostingList;
+import containers.Query;
+import exceptions.IndexConfigException;
+import exceptions.RetrievalModelConfigException;
+import preprocessing.Preprocessor;
+import tools.Loader;
+
+public class StaticRanker {
+	private String indexConfiguration;
+	private HashMap<String, PostingList> index;
+	private String retrievalModelConfig;
+	private HashMap<String, Query> queries;
+	private Set<String> documents;
+	
+	// parameters: index configuration and pre=processed queries
+	public StaticRanker(String indexConfig, String ret_model_config, String indexDirPath, String queryPath, String resultsPath) {
+		indexConfiguration = indexConfig;
+		try {
+			index = new Loader().loadStandardIndex(indexConfiguration);
+
+		} catch (IndexConfigException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		retrievalModelConfig = ret_model_config;
+		queries = new Preprocessor(indexConfiguration).preprocess();
+		documents = gatherDocuments();
+	}
+	
+	public Set<String> gatherDocuments() {
+		Set<String> docNumbers = new HashSet<String>();
+		for (String term : index.keySet()) {
+			PostingList postingList = index.get(term);
+			
+			for (String DocNo : postingList.map().keySet()) {
+				if (docNumbers.contains(DocNo)) {
+					continue;
+				} else {
+					docNumbers.add(DocNo);
+				}
+			}
+		}
+		return docNumbers;
+	}
+	
+	public void rank() throws RetrievalModelConfigException {
+		if (retrievalModelConfig == "cosine") {
+			new StaticVectorSpaceModel(index, queries, documents).cosine();
+		} else if (retrievalModelConfig == "bm25") {
+			new StaticProbabilisticModel(index, queries, documents).BM25();
+		} else if (retrievalModelConfig == "lm") {
+			new StaticLanguageModel(index, queries, documents).Dirichlet();
+		} else {
+			throw new RetrievalModelConfigException("Invalid retrieval model configuration: " + retrievalModelConfig);
+		}
+	}
+}

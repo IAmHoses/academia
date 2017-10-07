@@ -1,0 +1,105 @@
+
+-------------------
+Runtime information
+-------------------
+Fold 1: 8.26 seconds
+Fold 2: 8.23 seconds
+Fold 3: 8.26 seconds
+Fold 4: 8.11 seconds
+Fold 5: 8.19 seconds
+Fold 6: 8.26 seconds
+Fold 7: 8.07 seconds
+Fold 8: 8.25 seconds
+Fold 9: 8.36 seconds
+Fold 10: 7.99 seconds
+
+-------------------------------
+Evaluation results for Model 1
+-------------------------------
+Micro/Micro precision: 0.74
+Micro/Micro recall: 0.43
+Micro/Micro F1: 0.54
+Micro/Micro accuracy: 0.82
+
+-------------------------------
+Evaluation results for Model 2
+-------------------------------
+Micro/Micro precision: 0.75
+Micro/Micro recall: 0.45
+Micro/Micro F1: 0.56
+Micro/Micro accuracy: 0.83
+
+-------------------------------
+Evaluation results for Model 3
+-------------------------------
+Micro/Micro precision: 0.74
+Micro/Micro recall: 0.45
+Micro/Micro F1: 0.56
+Micro/Micro accuracy: 0.84
+
+-------------------------------
+Evaluation results for Model 4
+-------------------------------
+Micro/Micro precision: 0.73
+Micro/Micro recall: 0.42
+Micro/Micro F1: 0.53
+Micro/Micro accuracy: 0.82
+
+-------------------------------
+Evaluation results for Model 5
+-------------------------------
+Micro/Micro precision: 0.75
+Micro/Micro recall: 0.41
+Micro/Micro F1: 0.53
+Micro/Micro accuracy: 0.82
+
+-------------------------------
+Evaluation results for Model 6
+-------------------------------
+Micro/Micro precision: 0.72
+Micro/Micro recall: 0.41
+Micro/Micro F1: 0.53
+Micro/Micro accuracy: 0.82
+
+-------------------------------
+Evaluation results for Model 7
+-------------------------------
+Micro/Micro precision: 0.76
+Micro/Micro recall: 0.43
+Micro/Micro F1: 0.55
+Micro/Micro accuracy: 0.83
+
+-------------------------------
+Evaluation results for Model 8
+-------------------------------
+Micro/Micro precision: 0.74
+Micro/Micro recall: 0.43
+Micro/Micro F1: 0.55
+Micro/Micro accuracy: 0.83
+
+-------------------------------
+Evaluation results for Model 9
+-------------------------------
+Micro/Micro precision: 0.75
+Micro/Micro recall: 0.48
+Micro/Micro F1: 0.58
+Micro/Micro accuracy: 0.84
+
+-------------------------------
+Evaluation results for Model 10
+-------------------------------
+Micro/Micro precision: 0.69
+Micro/Micro recall: 0.41
+Micro/Micro F1: 0.52
+Micro/Micro accuracy: 0.82
+
+----------------------------
+Aggregate evaluation results
+----------------------------
+Average Micro Precision: 0.74
+Average Micro Recall: 0.43
+Average Micro F1: 0.74
+Average Macro Precision: 0.74
+Average Macro Recall: 0.43
+Average Macro F1: 0.55
+Average Accuracy: 0.83

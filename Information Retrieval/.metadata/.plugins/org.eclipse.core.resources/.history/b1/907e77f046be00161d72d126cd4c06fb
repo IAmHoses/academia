@@ -1,0 +1,48 @@
+package preprocessing;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+
+import containers.Document;
+import containers.Triple;
+import tools.Loader;
+
+public class DocumentPreprocessor {
+	
+	private HashMap<String, Document> rawDocuments;
+	private DocumentPrepper prepper;
+	private DocumentNormalizer normalizer;
+	
+	private HashMap<String, Triple[]> tokenizedDocuments;
+	
+	public DocumentPreprocessor() {
+		rawDocuments = new Loader().loadRawDocuments();
+		
+//		System.out.println("Number of raw documents: " + rawDocuments.size());
+		
+		prepper = new DocumentPrepper();
+		normalizer = new DocumentNormalizer();
+		tokenizedDocuments = new HashMap<String, Triple[]>();
+	}
+	
+	public HashMap<String, Triple[]> preprocess() {
+		Document testDoc = rawDocuments.get("FR940104-0-00001");
+		
+		testDoc = prepper.prepare(testDoc);
+		testDoc = normalizer.normalize(testDoc);
+		testDoc.tokenize();
+		
+		Triple[] tokenizedDoc = new Triple[testDoc.tokens().keySet().size()];
+		
+		int i = 0;
+		for (String token : testDoc.tokens().keySet()) {
+			tokenizedDoc[i++] = testDoc.tokens().get(token);
+		}
+		
+		tokenizedDocuments.put(testDoc.number(), tokenizedDoc);
+		
+//		System.out.println(testDoc.text());
+		
+		return tokenizedDocuments;
+	}
+}

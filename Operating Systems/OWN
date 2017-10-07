@@ -1,0 +1,9 @@
+--------------------------------------
+	MY PAGE REPLACEMENT ALGORITHM	 
+--------------------------------------
+
+The paging algorithm I came up with is basically a modification of Global Clock, where instead of using a single reference bit, the algorithm uses a bitstring to keep track of counts on each page. This bitstring is represented by an integer for each page. Whenever the clock encounters a hit while accessing a page, it increments that page's reference integer (or reference bitstring), and whenever the clock encounters a miss it decrements the offending page.
+
+I thought this algorithm would work decently well since pages that produce repeated hits will be rewarded by staying in memory longer, while pages that produce repeated misses will quickly be recognized as deprecated by the simulator even if their reference integer is greater than 1.
+
+In terms of runtimes, this algorithm was able to consistently outperform every other algorithm except Global Clock, which even outperformed it in terms of drops -- indicating that Global Clock was able to better keep pages clean in memory for reading without having to write them back to disk when dropped. Overall, I'd say that the algorithm did not meet my expectations, despite introducing a reference integer leading me to believe that it would result in better performance over a simpler reference bit.

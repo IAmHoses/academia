@@ -1,0 +1,33 @@
+package main;
+
+import java.util.LinkedList;
+
+import exceptions.CommandLineArgumentException;
+import exceptions.RetrievalModelConfigException;
+import ranking.Ranker;
+
+public class Main {
+
+	public static void main(String[] args) throws CommandLineArgumentException {
+		
+		for (String argument : args) {
+			System.out.println(argument);
+		}
+		
+		if (args.length == 3) {
+			long t0 = System.nanoTime();
+			System.out.println("Statically ranking...");
+			
+			new Ranker(args[0], args[1], args[2]).rank();
+			
+			long t1 = System.nanoTime();
+			System.out.println("Done statically ranking!");
+			
+			long delta_t0 = (long) ((t1 - t0) * Math.pow(10, -6));
+			System.out.println("Time taken to process queries: " + String.valueOf(delta_t0) + " milliseconds");
+		}
+		else {
+			throw new CommandLineArgumentException("Invalid number of command line arguments: " + (args.length - 1));
+		}
+	}
+}

@@ -1,0 +1,10 @@
+package scheduling;
+
+public class SchedulingAlgorithmArgumentException extends Exception {
+
+	private static final long serialVersionUID = -4818613483124928529L;
+
+	public SchedulingAlgorithmArgumentException (String message) {
+		super(message);
+	}
+}

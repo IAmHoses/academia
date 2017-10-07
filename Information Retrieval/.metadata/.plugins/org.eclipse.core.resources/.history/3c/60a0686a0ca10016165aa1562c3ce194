@@ -1,0 +1,93 @@
+package preprocessing;
+
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import containers.Query;
+import containers.Triple;
+import tools.Loader;
+
+public class Preprocessor {
+	private String testKey = "265";
+	private String indexConfiguration;
+	private HashMap<String, Query> queries;
+	
+	public Preprocessor(String indexConfig) {
+		indexConfiguration = indexConfigs;
+		queries = new Loader().loadQueries("QueryFile/queryfile.txt");
+	}
+	
+	public HashMap<String, Query> queries() {
+		return queries;
+	}
+	
+	public void preprocess() {
+		QueryPrepper queryPrepper = new QueryPrepper();
+		QueryNormalizer queryNormalizer = new QueryNormalizer();
+		
+		for (String key : queries.keySet()) {
+			Query query = queries.get(key);
+			
+			query = queryPrepper.prepare(query);
+			query = queryNormalizer.normalize(query);
+			
+			queries.replace(key, query);
+		}
+		extractTokens();
+	}
+	
+	public void extractTokens() {
+		HashMap<String, String> stopWords = new Loader().buildDictionary("resources/stopwords.txt", 1);
+		
+		if (indexConfiguration == "SINGLE_TERM") {
+			for (String key: queries.keySet()) {
+				Query query = queries.get(key);
+				
+				String[] tokens = query.string().split("\\s+");
+				
+				for (String token: tokens) {
+					if (stopWords.containsKey(token)) {
+						continue;
+					} else {
+						if (query.tokens().containsKey(token)) {
+							Triple tokenTriple = query.tokens().get(token);
+							tokenTriple.increment_tf();
+							query.tokens().replace(token, tokenTriple);
+						} else {
+							query.tokens().put(token, new Triple(token, query.number(), 1));
+						}
+					}
+				}
+				queries.replace(query.number(), query);
+			}
+		}
+		
+		if (indexConfiguration == "STEM") {
+			PorterStemmer stemmer = new PorterStemmer();
+			
+			for (String key: queries.keySet()) {
+				Query query = queries.get(key);
+				
+				String[] tokens = query.string().split("\\s+");
+				
+				for (String token: tokens) {
+					String stemmedToken = stemmer.stripAffixes(token);
+					
+					if (stopWords.containsKey(stemmedToken)) {
+						continue;
+					} else {
+						if (query.tokens().containsKey(stemmedToken)) {
+							Triple tokenTriple = query.tokens().get(stemmedToken);
+							tokenTriple.increment_tf();
+							query.tokens().replace(stemmedToken, tokenTriple);
+						} else {
+							query.tokens().put(stemmedToken, new Triple(stemmedToken, query.number(), 1));
+						}
+					}
+				}
+				queries.replace(query.number(), query);
+			}
+		}
+	}
+}

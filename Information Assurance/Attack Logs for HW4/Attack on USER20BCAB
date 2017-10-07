@@ -1,0 +1,11 @@
+clay b9f195c5cc7ef6afadbfbc42892ad47d3b24c6bc94bb510c4564a90a14e8b799 = swordfish
+AzureDiamond f52fbd32b2b3b86ff88ef6c490628285f482af15ddcb29541f94bcf526a3f6c7 = hunter2
+salmon  2a49ecf4ebeebd2d12a219293f17d1b7be25a1c816855c99cf18bbb6f6d325ec = 
+mahimahi 5d2bdbe191630e39ecc5a91e8e81c916d68f479a1b086769d729ef1ba3e2a2b9 = 
+goldfish fbd96cea5f8546bbb4e93fd6009167c865acc9454a0497047a45d0872923f21b = iurjs
+
+Used a hash cracker (sha256)
+Unable to crack salmon and mahimahi
+
+Tried to access secret file with user goldfish. I got a true return for username and
+password match, but the contents of the secret file were not output

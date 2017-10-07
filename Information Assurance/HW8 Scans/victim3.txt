@@ -1,0 +1,66 @@
+mah343@ia-class:~$ nmap -sS -A -v victim3
+
+Starting Nmap 5.00 ( http://nmap.org ) at 2015-12-08 20:32 EST
+NSE: Loaded 30 scripts for scanning.
+Initiating ARP Ping Scan at 20:32
+Scanning 172.16.121.132 [1 port]
+Completed ARP Ping Scan at 20:32, 0.15s elapsed (1 total hosts)
+Initiating SYN Stealth Scan at 20:32
+Scanning victim3 (172.16.121.132) [1000 ports]
+Discovered open port 135/tcp on 172.16.121.132
+Discovered open port 139/tcp on 172.16.121.132
+Discovered open port 445/tcp on 172.16.121.132
+Completed SYN Stealth Scan at 20:32, 1.28s elapsed (1000 total ports)
+Initiating Service scan at 20:32
+Scanning 3 services on victim3 (172.16.121.132)
+Completed Service scan at 20:32, 6.01s elapsed (3 services on 1 host)
+Initiating OS detection (try #1) against victim3 (172.16.121.132)
+NSE: Script scanning 172.16.121.132.
+NSE: Starting runlevel 1 scan
+Initiating NSE at 20:32
+Completed NSE at 20:32, 0.01s elapsed
+NSE: Starting runlevel 2 scan
+Initiating NSE at 20:32
+Completed NSE at 20:32, 0.01s elapsed
+NSE: Script Scanning completed.
+Host victim3 (172.16.121.132) is up (0.00026s latency).
+Interesting ports on victim3 (172.16.121.132):
+Not shown: 997 closed ports
+PORT    STATE SERVICE      VERSION
+135/tcp open  msrpc        Microsoft Windows RPC
+139/tcp open  netbios-ssn
+445/tcp open  microsoft-ds Microsoft Windows XP microsoft-ds
+MAC Address: 00:0C:29:23:70:20 (VMware)
+Device type: general purpose
+Running: Microsoft Windows XP|2003
+OS details: Microsoft Windows XP Professional SP2 or Windows Server 2003, Microsoft Windows XP SP2 or SP3
+Network Distance: 1 hop
+TCP Sequence Prediction: Difficulty=262 (Good luck!)
+IP ID Sequence Generation: Incremental
+Service Info: OS: Windows
+
+Host script results:
+|  nbstat: NetBIOS name: CLAY-4498E4F0FF, NetBIOS user: <unknown>, NetBIOS MAC: 00:0c:29:23:70:20
+|  Name: CLAY-4498E4F0FF<00>  Flags: <unique><active>
+|  Name: WORKGROUP<00>        Flags: <group><active>
+|  Name: CLAY-4498E4F0FF<20>  Flags: <unique><active>
+|  Name: WORKGROUP<1e>        Flags: <group><active>
+|  Name: WORKGROUP<1d>        Flags: <unique><active>
+|_ Name: \x01\x02__MSBROWSE__\x02<01>  Flags: <group><active>
+|  smb-os-discovery: Windows XP
+|  LAN Manager: Windows 2000 LAN Manager
+|  Name: WORKGROUP\CLAY-4498E4F0FF
+|_ System time: 2015-12-08 20:32:16 UTC-5
+
+Read data files from: /usr/share/nmap
+OS and Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 9.60 seconds
+           Raw packets sent: 1024 (45.768KB) | Rcvd: 1017 (41.248KB)
+           
+-----------------------------------------------------------------------------------------
+
+Windows XP -> 
+msrpc -> http://searchsecurity.techtarget.com/feature/Hacking-Windows-MSRPC-vulnerabilities
+	  -> http://cyruslab.net/2012/03/06/metasploit-gaining-remote-access-to-windows-xp/
+netbios-ssn -> http://henrydu.com/blog/networks/windows-tcp-139-and-445-vulnerability-335.html
+microsoft-ds -> https://www.grc.com/port_445.htm

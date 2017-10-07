@@ -1,0 +1,16 @@
+Multiple Regression Model vs GDP Simple Regression Model (Transformed)
+
+(0.7798 - 0.5164) / (1 - 0.5164) = 0.544665012
+
+------------------------------------------------------------------------------
+
+Multiple Regression Model vs Sanitation Simple Regression Model (Transformed)
+
+(0.7798 - 0.6491) / (1 - 0.6491) = 0.372470789
+
+------------------------------------------------------------------------------
+
+Multiple Regression Model vs Urban Simple Regression Model (Transformed)
+
+
+(0.7798 - 0.3942) / (1 - 0.3942) = 0.636513701

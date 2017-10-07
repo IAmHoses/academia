@@ -1,0 +1,26 @@
+package scheduling;
+
+import java.util.LinkedList;
+
+// all main does is load processes and bootstrap the scheduling algorithm
+
+@SuppressWarnings("unused")
+public class Main { 
+
+	public static void main (String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+	
+	public Main () {
+		LinkedList<Process> processes = loadProcesses();
+	}
+	
+	private LinkedList<Process> loadProcesses () {
+		LinkedList<Process> processes = new LinkedList<Process>();
+		
+		
+		
+		return processes;
+	}
+}

@@ -1,0 +1,39 @@
+package ranking;
+
+import java.util.HashMap;
+import java.util.Set;
+
+import containers.PostingList;
+import containers.Query;
+
+public class LanguageModel {
+	private HashMap<String, PostingList> index;
+	private HashMap<String, Query> queries;
+	private Set<String> documents;
+	
+	private int N;	// number of documents in index
+	private int C;
+	private HashMap<String, Integer> docLengths;
+	private double avgDocLength;
+	
+	public LanguageModel(HashMap<String, PostingList> _index, HashMap<String, Query> _queries, Set<String> docs) {
+		index = _index;
+		queries = _queries;
+		documents = docs;
+		N = documents.size();
+		docLengths = new HashMap<String, Integer>();
+	}
+	
+	public void Dirichlet() {
+		compute_C_docLengths_and_avgDocLength();
+		generateDirichletOutput();
+	}
+	
+	public void compute_C_docLengths_and_avgDocLength() {
+		
+	}
+	
+	public void generateDirichletOutput() {
+		
+	}
+}

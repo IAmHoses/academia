@@ -1,0 +1,15 @@
+0d09a83e8659dd37b875e43498823459b3e27b42299d80960557d443f6bf98e0 = AzureDiamond
+f52fbd32b2b3b86ff88ef6c490628285f482af15ddcb29541f94bcf526a3f6c7 = hunter2
+06363555054de198a87c4c743572dd5113a5fa5d298b9478a30c29ebb9d38b97 = clay
+b9f195c5cc7ef6afadbfbc42892ad47d3b24c6bc94bb510c4564a90a14e8b799 = swordfish
+70a98c77b5c03644ea0492b0147a074d7cf4bb6c0230f60ef9a78ac80894738b = blackhat
+615b26545c0f17635b6f0d0d70c0c8d5c9405881c00f972627a26bf129be51bb = cracked
+742a4045c10738d1b39e506edb4370fac34ea98daffc772396bfcc62713fd965 = bobama
+88e5bdf204fb0b2f622ee2b045da418793f8c504d985cd1e5d6f86bb02fc9a3a = potus
+00ffd826a586a88907205dcfeec32856bee4397f8369cdacd33699c8665cff92 = notabug
+2ad562319767157087dda0dec6391f4479f8a04869ab0cc8d3a9c3637dae73b5 = feature
+
+I really liked how this user also hashed her usernames, but they were still simple enough
+to be cracked. Good idea, but maybe make the account names a bit more complex? Even still,
+if the passwords were better they wouldn't have the same problem as the username -- being
+too simple for a hash cracker to crack.

@@ -1,0 +1,18 @@
+package scheduling;
+
+import java.util.LinkedList;
+
+public class Process {
+	private int startTime;
+	private LinkedList<Subprocess> subprocesses;
+	
+	public Process (int startTime) {
+		this.startTime = startTime;
+		subprocesses = new LinkedList<Subprocess>(); 
+	}
+	
+	public LinkedList<Subprocess> getSubprocesses() {
+		return subprocesses;
+	}
+
+}

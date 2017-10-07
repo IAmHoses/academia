@@ -1,0 +1,47 @@
+package ranking;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import containers.PostingList;
+import containers.Query;
+import preprocessing.Preprocessor;
+import tools.Loader;
+
+public class Ranker {
+	private HashMap<String, PostingList> index;
+	private HashMap<String, Query> queries;
+	private Set<String> documents;
+	private String resultsDirectory;
+	
+	// parameters: index configuration and pre=processed queries
+	public Ranker(String indexPath, String queryPath, String resultsDir) {
+
+		index = new Loader().loadIndex(indexPath);
+		queries = new Preprocessor(queryPath).preprocess();
+		documents = gatherDocuments();
+		
+		resultsDirectory = resultsDir;
+	}
+	
+	public Set<String> gatherDocuments() {
+		Set<String> docNumbers = new HashSet<String>();
+		for (String term : index.keySet()) {
+			PostingList postingList = index.get(term);
+			
+			for (String DocNo : postingList.map().keySet()) {
+				if (docNumbers.contains(DocNo)) {
+					continue;
+				} else {
+					docNumbers.add(DocNo);
+				}
+			}
+		}
+		return docNumbers;
+	}
+	
+	public void rank() {
+		new BM25(index, queries, documents, resultsDirectory).BM25();
+	}
+}

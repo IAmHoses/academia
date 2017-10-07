@@ -1,0 +1,5 @@
+fundef z = add(x, y)
+z = x + y;
+endfun
+
+print(add(12, 13))

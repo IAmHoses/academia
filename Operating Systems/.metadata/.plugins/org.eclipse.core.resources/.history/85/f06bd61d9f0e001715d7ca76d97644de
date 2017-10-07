@@ -1,0 +1,72 @@
+package scheduling;
+
+import java.util.LinkedList;
+
+public class RoundRobin {
+	private LinkedList<Process> processes;
+	private Integer timeQuantum;
+	private Boolean verboseEnabled;
+	private Integer totalTime;
+	
+	public RoundRobin (LinkedList<Process> processes, Integer timeQuantum, Boolean verboseEnabled) {
+		this.processes = processes;
+		this.timeQuantum = timeQuantum;
+		this.verboseEnabled = verboseEnabled;
+		totalTime = 0;
+	}
+	
+	public void schedule () {
+		int round = 1;
+		
+		while (!processes.isEmpty()) {
+			startArrivingProcesses();
+			
+			if (verboseEnabled) {
+				System.out.print("State of queue before scheduling round " + round + ": "); 
+				
+				for (int i = 0; i < processes.size(); i++) {
+					Process process = processes.get(i);
+					if (process.hasStarted()) {
+						if (process.isIdle()) {
+							System.out.print("Process" + process.getProcessNumber() + " (Idle) ");
+						}
+						else {
+							System.out.print("Process" + process.getProcessNumber() + " ");
+						}
+					}
+				}
+				
+				System.out.print("\n");
+			}
+			
+			for (Process process : processes) {
+				
+				if (process.hasStarted()) {
+					totalTime = process.subtractTime(totalTime, timeQuantum);
+				}
+				
+				if (process.isFinished()) {
+					processes.remove(process);
+				}
+			}
+			
+			if (verboseEnabled) {
+				System.out.print("\n");
+				round++;
+			}
+		}
+		System.out.println("end");
+	}
+	
+	private void startArrivingProcesses () {
+		for (Process process : processes) {
+			if (totalTime >= process.getStartTime()) {
+				process.start();
+				
+				if (process.getSubprocesses().getFirst().getType().equals("I")) {
+					process.sleep();
+				}
+			}
+		}
+	}
+}

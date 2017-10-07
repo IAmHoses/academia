@@ -1,0 +1,46 @@
+mah343@ia-class:~$ nmap -sS -A -v victim1
+
+Starting Nmap 5.00 ( http://nmap.org ) at 2015-12-08 20:27 EST
+NSE: Loaded 30 scripts for scanning.
+Initiating ARP Ping Scan at 20:27
+Scanning 172.16.121.128 [1 port]
+Completed ARP Ping Scan at 20:27, 0.16s elapsed (1 total hosts)
+Initiating SYN Stealth Scan at 20:27
+Scanning victim1 (172.16.121.128) [1000 ports]
+Discovered open port 3306/tcp on 172.16.121.128
+Discovered open port 6000/tcp on 172.16.121.128
+Discovered open port 631/tcp on 172.16.121.128
+Completed SYN Stealth Scan at 20:27, 1.29s elapsed (1000 total ports)
+Initiating Service scan at 20:27
+Scanning 3 services on victim1 (172.16.121.128)
+Completed Service scan at 20:27, 6.01s elapsed (3 services on 1 host)
+Initiating OS detection (try #1) against victim1 (172.16.121.128)
+NSE: Script scanning 172.16.121.128.
+NSE: Script Scanning completed.
+Host victim1 (172.16.121.128) is up (0.00036s latency).
+Interesting ports on victim1 (172.16.121.128):
+Not shown: 997 closed ports
+PORT     STATE SERVICE VERSION
+631/tcp  open  ipp     CUPS 1.1
+3306/tcp open  mysql   MySQL (unauthorized)
+6000/tcp open  X11     (access denied)
+MAC Address: 00:0C:29:FF:E5:FB (VMware)
+Device type: general purpose
+Running: Linux 2.6.X
+OS details: Linux 2.6.13 - 2.6.27
+Uptime guess: 8.283 days (since Mon Nov 30 13:39:14 2015)
+Network Distance: 1 hop
+TCP Sequence Prediction: Difficulty=197 (Good luck!)
+IP ID Sequence Generation: All zeros
+Service Info: OS: Unix
+
+Read data files from: /usr/share/nmap
+OS and Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 9.83 seconds
+           Raw packets sent: 1027 (45.948KB) | Rcvd: 1016 (41.364KB)
+
+-----------------------------------------------------------------------------------------
+
+ipp -> http://www.saintcorporation.com/cgi-bin/demo_tut.pl?tutorial_name=CUPS_vulnerabilities.html
+MySQL -> http://www.saintcorporation.com/cgi-bin/demo_tut.pl?tutorial_name=MySQL_vulnerabilities.html
+

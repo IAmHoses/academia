@@ -1,0 +1,89 @@
+> summary(final.lm1)
+
+Call:
+lm(formula = log(final$Infant.Mortality) ~ final$GDP.per.Capita,
+    data = final)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-1.76475 -0.49593  0.00939  0.54512  1.90949
+
+Coefficients:
+                       Estimate Std. Error t value Pr(>|t|)
+(Intercept)           3.241e+00  7.060e-02   45.90   <2e-16 ***
+final$GDP.per.Capita -4.390e-05  3.259e-06  -13.47   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.7528 on 168 degrees of freedom
+Multiple R-squared:  0.5193,  Adjusted R-squared:  0.5164
+F-statistic: 181.5 on 1 and 168 DF,  p-value: < 2.2e-16
+
+
+> shapiro.test(final.lm1$residuals)
+
+  Shapiro-Wilk normality test
+
+data:  final.lm1$residuals
+W = 0.99304, p-value = 0.5927
+
+------------------------------------------------------------------
+
+> summary(final.lmTrans2)
+
+Call:
+lm(formula = log(final$Infant.Mortality) ~ final$Sanitation,
+    data = final)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-1.53741 -0.48106  0.05174  0.44023  1.65273
+
+Coefficients:
+                  Estimate Std. Error t value Pr(>|t|)
+(Intercept)       4.878713   0.132843   36.73   <2e-16 ***
+final$Sanitation -0.030080   0.001699  -17.71   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.6413 on 168 degrees of freedom
+Multiple R-squared:  0.6512,  Adjusted R-squared:  0.6491
+F-statistic: 313.6 on 1 and 168 DF,  p-value: < 2.2e-16
+
+
+> shapiro.test(final.lmTrans2$residuals)
+
+  Shapiro-Wilk normality test
+
+data:  final.lmTrans2$residuals
+W = 0.99227, p-value = 0.4979
+
+-------------------------------------------------------------------
+
+> summary(final.lmTrans3)
+
+Call:
+lm(formula = log(final$Infant.Mortality) ~ final$Urban, data = final)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-2.17254 -0.59894  0.05892  0.60738  1.94163
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)
+(Intercept)  4.379189   0.172599   25.37   <2e-16 ***
+final$Urban -0.029501   0.002801  -10.53   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.8426 on 168 degrees of freedom
+Multiple R-squared:  0.3978,  Adjusted R-squared:  0.3942
+F-statistic:   111 on 1 and 168 DF,  p-value: < 2.2e-16
+
+
+> shapiro.test(final.lmTrans3$residuals)
+
+  Shapiro-Wilk normality test
+
+data:  final.lmTrans3$residuals
+W = 0.98692, p-value = 0.1143

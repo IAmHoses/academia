@@ -1,0 +1,60 @@
+package scheduling;
+
+import java.util.LinkedList;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.IOException;
+
+// all main does is load processes and bootstrap the scheduling algorithm
+
+public class Master { 
+
+	public static void main (String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+	
+	public Master () {
+		LinkedList<Process> processes = loadProcesses();
+	}
+	
+	private LinkedList<Process> loadProcesses () {
+		LinkedList<Process> processes = new LinkedList<Process>();
+		
+		int processID = 1;
+		
+		while (true) {
+			Path path = Paths.get("process-" + processID + ".txt");
+			Charset charset = Charset.forName("US-ASCII");
+			
+			Process currentProcess = null;
+			
+			try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
+			    String line = null;
+			    while ((line = reader.readLine()) != null) {
+			        String[] splitLine = line.split("\\s+");
+			        
+			        if (splitLine[0].equals("start")) {
+			        	currentProcess = new Process(Integer.parseInt(splitLine[1]));
+			        }
+			        else if (splitLine[0].equals("B") || splitLine[0].equals("I")) {
+			        	Subprocess newSubprocess = new Subprocess(splitLine[0], Integer.parseInt(splitLine[1]));
+			        	currentProcess.addSubprocess(newSubprocess);
+			        }
+			        else {
+			        	break;
+			        }
+			    }
+			} catch (IOException e) {
+			    break;
+			}
+			
+			processID++;
+		}
+
+		return processes;
+	}
+}

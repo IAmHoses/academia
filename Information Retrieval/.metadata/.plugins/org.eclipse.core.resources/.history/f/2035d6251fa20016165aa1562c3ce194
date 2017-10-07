@@ -1,0 +1,152 @@
+package dynamic_ranking;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
+import containers.PositionalPostingList;
+import containers.PostingList;
+import containers.Query;
+import containers.Score;
+import tools.ScoreComparator;
+
+public class DynamicBM25 {
+	private HashMap<String, PostingList> phraseIndex;
+	private HashMap<String, PositionalPostingList> positionalIndex;
+	private HashMap<String, Query> phraseQueries;
+	private HashMap<String, Query> positionalQueries;
+	private Set<String> phraseDocuments;
+	private Set<String> positionalDocuments;
+	
+	private int N_phraseIndex;	// number of documents in phrase index
+	private int N_positionalIndex;	// number of documents in positional index
+	private HashMap<String, Double> d_squares;
+	private HashMap<String, Double> w_squares;
+	
+	public DynamicBM25(HashMap<String, PostingList> _phraseIndex, HashMap<String, PositionalPostingList> _positionalIndex, 
+			HashMap<String, Query> _phraseQueries, HashMap<String, Query> _positionalQueries, 
+			Set<String> phraseDocs, Set<String> positionalDocs) {
+		
+		System.out.println("Inside DynamicBM25 constructor");
+		
+		phraseIndex = _phraseIndex;
+		positionalIndex = _positionalIndex;
+		phraseQueries = _phraseQueries;
+		positionalQueries = _positionalQueries;
+		phraseDocuments = phraseDocs;
+		positionalDocuments = positionalDocs;
+		
+		N_phraseIndex = phraseDocuments.size();
+		N_positionalIndex = positionalDocuments.size();
+		
+		d_squares = new HashMap<String, Double>();
+		w_squares = new HashMap<String, Double>();
+		
+		System.out.println(phraseQueries.size());
+	}
+	
+	public void launch() {
+//		compute_idfs();
+//		compute_d_squares();
+//		compute_q_squares();
+//		generateCosineMeasureOutput();
+	}
+	
+	public String determineIndexConfig(String queryNum, int df_threshold) {
+		int df_sum = 0;
+		
+		Query query = phraseQueries.get(queryNum);
+		
+		for (String token : query.tokens().keySet()) {
+			if (phraseIndex.containsKey(token)) {
+				df_sum += phraseIndex.get(token).map().size();
+			}
+		}
+		
+		if (df_sum >= df_threshold) {
+			return "PHRASE";
+		} else {
+			return "PROXIMITY";
+		}
+	}
+	
+	public void generateBM25Output(double k_1, int k_2, double b) {
+		String output = "";
+		
+		for (String queryNum : queries.keySet()) {
+			Query query = queries.get(queryNum);
+			
+			Score[] scores = new Score[N];
+			int i = 0;
+			
+			for (String docNo : documents) {
+				double score = 0;
+				
+				for (String token : query.tokens().keySet()) {
+//					System.out.println(token);
+					
+					if (!index.containsKey(token)) {
+						continue;
+					}
+					
+					PostingList postingList = index.get(token);	// grab posting list for current query token
+					
+					if (postingList.map().containsKey(docNo)) {	// posting list for token has a mapping for the document in question
+						double w = postingList.idf();
+						
+						double term2_numerator = (k_1 + 1) * postingList.map().get(docNo).tf();
+						double term2_denominator = (postingList.map().get(docNo).tf() + 
+								(k_1 * (1 - b + (b * (docLengths.get(docNo) / avgDocLength)))));
+						
+						double term3 = ((k_2 + 1) * query.tokens().get(token).tf()) / (k_2 + query.tokens().get(token).tf());
+						
+						score += w * (term2_numerator / term2_denominator) * term3;
+					}
+				}	
+				
+				if (String.valueOf(score)!= "NaN" && score != 0) {
+					scores[i] = new Score(score, query.number(), docNo);
+					i++;
+				}
+			}
+		    List<Score> list = new ArrayList<Score>(Arrays.asList(scores));
+		    list.removeAll(Collections.singleton(null));
+		    scores = list.toArray(new Score[list.size()]);
+			
+			Arrays.sort(scores, new ScoreComparator());
+			
+			int indexUpperLimit;
+			
+			if (scores.length > 100) {
+				indexUpperLimit = 100;
+			} else {
+				indexUpperLimit = scores.length;
+			}
+			
+			for (int j = 0; j < indexUpperLimit; j++) {
+				output += scores[j].queryNumber() + " 0 " + scores[j].documentNumber() + " " + (j+1) + " " + scores[j].score() + " BM25\n";
+			}
+		}
+		
+		// NOW WRITE THAT SHIT :D
+		
+		Path path = Paths.get("Results/dynamicBM25.txt");
+		try {
+			BufferedWriter bw = Files.newBufferedWriter(path, StandardOpenOption.CREATE);
+			bw.write(output);
+			bw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

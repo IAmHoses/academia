@@ -1,0 +1,43 @@
+package main;
+
+import static_ranking.StaticRanker;
+import tools.Combination;
+import dynamic_ranking.DynamicRanker;
+import exceptions.CommandLineArgumentException;
+import exceptions.RetrievalModelConfigException;
+
+public class Main {
+
+	public static void main(String[] args) throws CommandLineArgumentException {
+		String[] test = new String[3];
+		test[0] = "foo";
+		test[1] = "bar";
+		test[2] = "fuck";
+		
+		Combination combo = new Combination();
+		combo.printCombination(test, 3, 2);
+		
+//		System.out.println("In main...");
+//		int argvLength = 4;
+//		if (argvLength == 6) {
+//			String indexConfig = "SINGLE_TERM";
+//			String sim_Measure = "LM";
+//			
+//			try {
+//				System.out.println("Statically ranking...");
+//				new StaticRanker(indexConfig, sim_Measure).rank();
+//				System.out.println("Done statically ranking!");
+//			} catch (RetrievalModelConfigException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		else if (argvLength == 4) {
+//			System.out.println("Dynamically ranking...");
+//			new DynamicRanker().rank();
+//			System.out.println("Done dynamically ranking!");
+//		}
+//		else {
+//			throw new CommandLineArgumentException("Invalid number of command line arguments: " + (argvLength - 1));
+//		}
+	}
+}

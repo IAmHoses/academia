@@ -1,0 +1,47 @@
+package scheduling;
+
+import java.util.LinkedList;
+
+public class RoundRobin {
+	private Integer timeQuantum;
+	private LinkedList<Process> processes;
+	private Integer totalTime;
+	
+	public RoundRobin (Integer timeQuantum, LinkedList<Process> processes) {
+		this.timeQuantum = timeQuantum;
+		this.processes = processes;
+		totalTime = 0;
+	}
+	
+	public void schedule () {
+		while (!processes.isEmpty()) {
+			startArrivingProcesses();
+			
+			for (Process process : processes) {
+				
+				if (process.hasStarted()) {
+					process.subtractTime(totalTime, timeQuantum);
+				}
+				
+				if (process.isFinished()) {
+					process.print();
+					processes.remove(process);
+				}
+				
+				totalTime += timeQuantum;
+			}
+		}
+	}
+	
+	private void startArrivingProcesses () {
+		for (Process process : processes) {
+			if (totalTime >= process.getStartTime()) {
+				process.start();
+				
+				if (process.getSubprocesses().getFirst().getType().equals("I")) {
+					process.sleep();
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,98 @@
+package ranking;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
+
+import containers.PostingList;
+import containers.Query;
+import exceptions.QueryReformationConfigException;
+import preprocessing.DocumentPreprocessor;
+import preprocessing.QueryPreprocessor;
+import tools.Loader;
+
+public class Ranker {
+	private HashMap<String, PostingList> index;
+	private HashMap<String, Query> queries;
+	private Set<String> documentNumbers;
+	private String resultsDirectory;
+	
+	private String queryReformationConfiguration;
+	private HashMap<String, LinkedList<String>> documents;
+	
+	// parameters: index configuration and pre=processed queries
+	public Ranker(String indexPath, String queryPath, String resultsDir, String queryReformationConfig) throws QueryReformationConfigException {
+		queryReformationConfiguration = queryReformationConfig;
+		
+		boolean longQueries;
+		
+		if (queryReformationConfiguration.equals("expand")) {
+			longQueries = false;
+		}
+		else if (queryReformationConfiguration.equals("reduce") || queryReformationConfiguration.equals("hybrid")) {
+			longQueries = true;
+		}
+		else {
+			throw new QueryReformationConfigException("Invalid query reformation configuration: " + queryReformationConfiguration);
+		}
+		
+		index = new Loader().loadIndex(indexPath);
+		queries = new QueryPreprocessor(queryPath, longQueries).preprocess();
+		documentNumbers = gatherDocumentNumbers();
+		resultsDirectory = resultsDir;
+		
+		compute_idfs(documentNumbers.size());
+	}
+	
+	public Set<String> gatherDocumentNumbers() {
+		Set<String> docNumbers = new HashSet<String>();
+		for (String term : index.keySet()) {
+			PostingList postingList = index.get(term);
+			
+			for (String DocNo : postingList.map().keySet()) {
+				if (docNumbers.contains(DocNo)) {
+					continue;
+				} else {
+					docNumbers.add(DocNo);
+				}
+			}
+		}
+		return docNumbers;
+	}
+	
+	public void compute_idfs(int N) {
+		for (String term : index.keySet()) {
+			PostingList postingList = index.get(term);
+			postingList.compute_probabilistic_model_idf(N);
+			index.replace(term, postingList);
+		}
+	}
+	
+	
+	public void rank() {
+		HashMap<String, LinkedList<String>> relDocLists = new BM25(index, queries, documentNumbers, resultsDirectory).BM25();
+		loadDocuments();
+		
+//		for (String queryNum : relDocLists.keySet()) {
+//			System.out.println("Size of rel doc list for " + queryNum + ": " + relDocLists.get(queryNum).size());
+//		}
+		
+//		for (String docNo : rawDocuments.keySet()) {
+//			System.out.println(rawDocuments.get(docNo));
+//		}
+		
+	}
+	
+	public void loadDocuments() {
+		HashMap<String, String> rawDocuments = new Loader().loadRawDocuments();
+		System.out.println("Number of raw documents: " + rawDocuments.size());
+		
+		DocumentPreprocessor preprocessor = new DocumentPreprocessor();
+		
+		for (String docNo : rawDocuments.keySet()) {
+			
+		}
+	}
+}
+

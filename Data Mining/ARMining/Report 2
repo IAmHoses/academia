@@ -1,0 +1,21 @@
+['Bounty 8-Pack White Paper Towels'] => General Mills Multi Bran Chex: 0.9766839378238342
+['Avocado'] => Puff's Plus Facial Tissue: 0.9383738995339203
+['Dole 6-Pack Pineapple Juice'] => RealLemon Pure Lemon Juice: 0.9200710479573713
+['General Mills Multi Bran Chex'] => Bounty 8-Pack White Paper Towels: 0.8490990990990991
+['Avocado'] => Skippy Peanut Butter: 0.8052673583399841
+["Puff's Plus Facial Tissue"] => Skippy Peanut Butter: 0.7541899441340782
+['Apple & Eve Apple Juice'] => Ocean Spray White Grapefruit Juice: 0.7413793103448276
+['Avocado'] => Tylenol Infant Liquid: 0.6971544715447154
+["Puff's Plus Facial Tissue"] => Avocado: 0.6897601827179292
+['Avocado'] => Cucumber: 0.6809006211180124
+['Avocado'] => Red Pepper: 0.6783369803063457
+['Avocado'] => Perdue Chicken Breasts: 0.6754498714652957
+['Avocado'] => Old El Paso Salsa: 0.6728354263053536
+['Avocado'] => Tropican Orange Juice: 0.6694533762057878
+['Avocado'] => Purina Cat Chow: 0.6693198263386396
+
+Although not immediately obvious, avacado dominated a lot of the lower end of high-confidence
+rules. I wouldn't have been able to pick up on that without sorting the rules by confidnece.
+However, even though avacados were the strongest product in terms of frequency by transaction,
+Bount 8-Pack White Paper Towels => General Mills Multi Bran Chex beat out an Avacado => Item
+rule for the top spot pretty convincingly

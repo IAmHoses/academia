@@ -1,0 +1,56 @@
+package ranking;
+
+import java.util.HashMap;
+import java.util.Set;
+
+import containers.PostingList;
+import containers.Query;
+
+public class LanguageModel {
+	private HashMap<String, PostingList> index;
+	private HashMap<String, Query> queries;
+	private Set<String> documents;
+	
+	private int N;	// number of documents in index
+	private int C;
+	private HashMap<String, Integer> docLengths;
+	private double avgDocLength;
+	
+	public LanguageModel(HashMap<String, PostingList> _index, HashMap<String, Query> _queries, Set<String> docs) {
+		index = _index;
+		queries = _queries;
+		documents = docs;
+		N = documents.size();
+		docLengths = new HashMap<String, Integer>();
+	}
+	
+	public void Dirichlet() {
+		compute_C_docLengths_and_avgDocLength();
+		generateDirichletOutput();
+	}
+	
+	public void compute_C_docLengths_and_avgDocLength() {
+		for (String term: index.keySet()) {
+			PostingList postingList = index.get(term);
+			
+			for (String docNo : postingList.map().keySet()) {
+				if (!docLengths.containsKey(docNo)) {
+					docLengths.put(docNo, postingList.map().get(docNo).tf());
+				} else {
+					docLengths.replace(docNo, docLengths.get(docNo) + postingList.map().get(docNo).tf());
+				}
+			}
+		}
+		int docLengthSum = 0;
+		
+		for (String docNo : docLengths.keySet()) {
+			C += docLengths.get(docNo);
+			docLengthSum += docLengths.get(docNo);
+		}
+		avgDocLength = docLengthSum / docLengths.size();
+	}
+	
+	public void generateDirichletOutput() {
+		
+	}
+}

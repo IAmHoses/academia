@@ -1,0 +1,88 @@
+> summary(final.lm1)
+
+Call:
+lm(formula = final$Infant.Mortality ~ final$GDP.per.Capita, data = final)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-25.115 -14.703  -5.694   9.464  66.429
+
+Coefficients:
+                       Estimate Std. Error t value Pr(>|t|)
+(Intercept)          32.2141792  1.7742478  18.157  < 2e-16 ***
+final$GDP.per.Capita -0.0006444  0.0000819  -7.869 4.18e-13 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 18.92 on 168 degrees of freedom
+Multiple R-squared:  0.2693,	Adjusted R-squared:  0.2649
+F-statistic: 61.92 on 1 and 168 DF,  p-value: 4.179e-13
+
+
+> shapiro.test(final.lm1$residuals)
+
+	Shapiro-Wilk normality test
+
+data:  final.lm1$residuals
+W = 0.89628, p-value = 1.527e-09
+
+------------------------------------------------------------------
+
+> summary(final.lm2)
+
+Call:
+lm(formula = final$Infant.Mortality ~ final$Sanitation, data = final)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-27.946  -5.791  -1.706   3.197  58.376
+
+Coefficients:
+                 Estimate Std. Error t value Pr(>|t|)
+(Intercept)      70.57525    2.48540   28.40   <2e-16 ***
+final$Sanitation -0.63858    0.03178  -20.09   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 12 on 168 degrees of freedom
+Multiple R-squared:  0.7062,	Adjusted R-squared:  0.7044
+F-statistic: 403.8 on 1 and 168 DF,  p-value: < 2.2e-16
+
+
+> shapiro.test(final.lm2$residuals)
+
+	Shapiro-Wilk normality test
+
+data:  final.lm2$residuals
+W = 0.89133, p-value = 7.938e-10
+
+-------------------------------------------------------------------
+
+> summary(final.lm3)
+
+Call:
+lm(formula = final$Infant.Mortality ~ final$Urban, data = final)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-36.534 -11.739  -3.115   7.115  64.812
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  54.7540     3.7532  14.589  < 2e-16 ***
+final$Urban  -0.5350     0.0609  -8.785 1.76e-15 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 18.32 on 168 degrees of freedom
+Multiple R-squared:  0.3148,	Adjusted R-squared:  0.3107
+F-statistic: 77.17 on 1 and 168 DF,  p-value: 1.755e-15
+
+
+> shapiro.test(final.lm3$residuals)
+
+	Shapiro-Wilk normality test
+
+data:  final.lm3$residuals
+W = 0.93676, p-value = 7.936e-07
+

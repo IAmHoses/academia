@@ -1,0 +1,18 @@
+REFACTORING LAST PROJECT:
+	1. caseFolding as a part of prepping
+	2. new regex for filenames:
+		SO THAT THEY DON'T GET CONFUSED WITH ACRONYMS
+	3. change in token extraction protocol:
+		urls > emails > monetaries > ips > filenames
+	4. potentially load filename extensions and extract them with that tool?
+		Fixes pseudo-issue where stuff like foo.py is being extracted by URL recognizer
+	5. new regex for acronyms
+	6. changed prefixes finding condition from if to while
+	7. changed numbers regex to include floating digit strings of length > 2 (1.2090420)
+	8. added slashedWords to Normalization procress (i.e. food/drug --> fooddrug food drug)
+	
+	
+WEIRD BUG IN WRITING STEM INDEX???? 
+	after "zoneenterpr" before "zoom", lots of repeated shit in the index --> 40104-2-00043 1 | plethysmographi FR940104-2-00038 1
+	
+Talk about how COSINE isn't as forgiving as BM and LM, Eamon's system wrekt urs dog, make sure you talk about that

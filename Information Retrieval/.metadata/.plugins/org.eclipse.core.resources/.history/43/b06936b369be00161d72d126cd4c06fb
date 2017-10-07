@@ -1,0 +1,52 @@
+package main;
+
+import static_ranking.StaticRanker;
+
+import java.util.LinkedList;
+
+import dynamic_ranking.DynamicRanker;
+import exceptions.CommandLineArgumentException;
+import exceptions.RetrievalModelConfigException;
+
+public class Main {
+
+	public static void main(String[] args) throws CommandLineArgumentException {
+		
+		if (args.length == 5) {
+			String indexConfig = "single";
+			String sim_Measure = "bm25";
+			
+			try {
+				long t0 = System.nanoTime();
+				System.out.println("Statically ranking...");
+				
+				new StaticRanker(args[3], args[2], args[0], args[1], args[4]).rank();
+				
+//				(String indexConfig, String ret_model_config, String indexDirPath, String queryPath, String resultsPath) {
+				
+				long t1 = System.nanoTime();
+				System.out.println("Done statically ranking!");
+				
+				long delta_t0 = (long) ((t1 - t0) * Math.pow(10, -6));
+				System.out.println("Time taken to process queries: " + String.valueOf(delta_t0) + " milliseconds");
+			} catch (RetrievalModelConfigException e) {
+				e.printStackTrace();
+			}
+		}
+		else if (args.length == 3) {
+			long t0 = System.nanoTime();
+			System.out.println("Dynamically ranking...");
+			
+			new DynamicRanker(args[0], args[1], args[2]).rank();
+			
+			long t1 = System.nanoTime();
+			System.out.println("Done dynamically ranking!");
+			
+			long delta_t0 = (long) ((t1 - t0) * Math.pow(10, -6));
+			System.out.println("Time taken to process queries: " + String.valueOf(delta_t0) + " milliseconds");
+		}
+		else {
+			throw new CommandLineArgumentException("Invalid number of command line arguments: " + (args.length - 1));
+		}
+	}
+}

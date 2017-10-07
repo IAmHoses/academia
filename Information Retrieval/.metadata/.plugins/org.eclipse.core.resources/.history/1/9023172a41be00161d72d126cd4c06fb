@@ -1,0 +1,12 @@
+package preprocessing;
+
+import containers.Document;
+
+public class DocumentNormalizer {
+	
+	public Document normalize(Document rawDoc) {
+		
+		
+		return rawDoc;
+	}
+}

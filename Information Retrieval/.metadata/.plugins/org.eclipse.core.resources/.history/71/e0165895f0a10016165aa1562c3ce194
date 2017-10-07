@@ -1,0 +1,33 @@
+package containers;
+
+import java.util.LinkedList;
+
+public class PositionalTriple extends Triple {
+	private LinkedList<Integer> positions;
+	
+	public PositionalTriple(String token, String identifier, int position) {
+		super(token, DOCNO, 1);
+		positions = new LinkedList<Integer>();
+		positions.add(position);
+	}
+	
+	public LinkedList<Integer> positions() {
+		return positions;
+	}
+	
+	public void addPosition(int position) {
+		positions.add(position);
+		increment_tf();
+	}
+	
+	public String printPositions() {
+		String printing = "{" + positions.get(0);
+		
+		for (int i = 1; i < positions.size(); i++) {
+			printing += "," + positions.get(i);
+		}
+		printing += "}";
+		
+		return printing;
+	}
+}

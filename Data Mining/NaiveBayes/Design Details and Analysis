@@ -1,0 +1,114 @@
+ -----------------------------------------
+ | PROJECT 1 DESIGN DETAILS AND ANALYSIS |
+ -----------------------------------------
+
+[Records.py]
+
+This file outlines a container that will hold each record of information 
+from adult-big.arff. It utilizes a dictionary to accomplish this goal, where
+each key in the dictionary corresponds to an attribute value in the record. I 
+also added getter functions for ease-of-use in files that will import Records.py, 
+but you can manually get any feature value by accessing the record's 'record_dict'
+dictionary
+
+Additionally, Records.py outlines a protocol for (1) importing raw data
+from adult-big.arff into the preprocessor and (2) importing preprocessed
+data from preprocessed-data.arff into the Naive Bayes classifier. The job
+of writing preprocessed-data.arff is left to Preprocessor.py, and the job
+of writing adult.out is left to Verifier.py
+
+------------------------------------------------------------------------------------------------------
+
+[Preprocessor.py]
+
+Provides implementation details of an object made to cleanse data. After loading
+raw data, the preprocessor can replace missing values (in a supervised fashion) and
+discretize values (by entropy) in a single function. However, there is one issue with
+the object's discretization method: I was only able to write the method such that
+ONE optimal split is made in the range of each continuous attribute, rather than recursively
+calling the method on each partition of the data after finding such an optimal split.
+
+I will make sure to patch up this short-coming on the next project, as finding multiple
+meaningful splits is integral to the strength of my results. Weka's aggregate accuracy was 84.07%,
+only slightly beating my accuracy of 83%. However, I don't want this result to be misleading
+if there are unnoticed conseqences from poor binning. As it currently stands, every
+continuous attribute will be split into only two bins based off maximum information gain
+found in the method Preprocessor.discretize_by_entropy()
+
+------------------------------------------------------------------------------------------------------
+
+[Model.py]
+
+Outlines a class that will serve as a container for much of the data manipulated by
+my Naive Bayes classifier. Each instance of of the Model class will contain a randomized
+set of training data (90% of preprocessed data) and testing data (10% of preprocessed
+data). Additionally, each instance of Model has useful counting variables and dictionaries
+probabilities unique to it that are made from its training data. These counting variables 
+and probability dictionaries are all instantiated and computed upon calling the constructor 
+for a Model object, so that they can be immediately used by the Naive Bayes classifier.
+
+Finally, note that the contructor of Model.py instantiates an empty array called 'classified'
+and an empty dictionary called 'confusion_matrix'. While these variables are not used by the 
+Naive Bayes classifier, they ARE used by the Verifier during the evaluation step.
+
+------------------------------------------------------------------------------------------------------
+
+[NaiveBayes.py]
+
+Each instance of NaiveBayes.py constructs itself with the following protocol: (1) load preprocessed
+data, (2) randomize a list of indices that ranges from 0 to len(preprocessed_data), (3) instantiate
+an empty list of models, (4) instantiate an array of 10 empty float values, each for model runtimes.
+
+Once the classifier's list of indices are randomized, it will iteratively construct randomized 
+models and train them. This method, NaiveBayes.make_models(), is certainly the most costly method in 
+terms of runtime, because of (1) making a deepcopy of preprocessing data for selecting unique random 
+testing data given to each model, and (2) the operations done on that deepcopy to produce training 
+data. See the implementation of NaiveBayes.make_models(), specifically the code bits involving 
+randomness.
+
+Outside of NaiveBayes.make_models(), if I were to optimize runtimes further for the next project, 
+I would also experiment more with Preprocessor.discretize_all_values() after correcting it (I 
+anticipate that adding more splits via recursion will become very costly). Making each model already 
+costs anywhere from 7-9 seconds (wall time)
+
+In any event, NaiveBayes.py is capable of logging runtimes for each model during NaiveBayes.make_models()
+and stores each model's runtime information during its iteration. NaiveBayes.py also logs runtimes 
+for each model during NaiveBayes.classify_all_models(), where it actually goes through each model's 
+testing data and places a prediction for reach record in Model.classified. However, note that model 
+runtimes in this method are ADDED to the appropriate slot in NaiveBayes.runtimes, rather than assigned.
+
+It is also worth noting that during the classification step, some of my conditional probability 
+calculations were behaving strangely. The python interpreter kept throwing a KeyError exception on key 
+values that were EXTREMELY infrequent in the preprocessed data: 'Never-worked', 'Holand-Netherlands', 
+'Outlying-US(Guam-USVI-etc)', 'Preschool', and 'Laos'. Where applicable, the classifier manually 
+computes conditional probabilities for these attributes given a class label on-the-fly. Else, the 
+classifier simply continues to the next step in calculating probability since the attribute is never 
+associated with the class label (contributes 0 to net conditional probability)
+
+------------------------------------------------------------------------------------------------------
+
+[Verifier.py]
+
+After each model is trained and classifies testing data based upon training, the Verifier class is 
+responsible for calculating and presenting results for analysis. Upon instantiation, a Verifier object 
+will iteratively calculate confusion matrices for each object, followed by precision, recall, F1, and 
+accuracy by model to save code space later. Once a Verifier object is fully constructed, it has 
+everything it needs to do calculations in an upper function like main. However, for the sake of keeping 
+main clean and organized, all of the formatted output to adult.out is completely constructed and written 
+to 'adult.out' within the Verifier object. Thus, only one method from Verifier need be called in main 
+to obtain results for analysis.
+
+------------------------------------------------------------------------------------------------------
+
+[Analysis]
+
+After utilizing WEKA Table 1 (see Results Tables in the project folder) to confirm the validity of my 
+results, I think that I might have misunderstood how to calcaulte Macro vs Micro-Averaging. If you 
+notice any flaws in my logic when calculating Macro/Micro precision, Macro/Micro recall, or 
+Macro/Micro F1, please let me know so that I can improve for the next project. It was a bit strange
+that all of my columns had the same value in every entry. Also, I want to make sure that I'm doing
+10-fold cross validation correctly during the training phase, but I'm hoping that it is correctly
+implemented and not contributing to the strange columns. Lastly, as I mentioned before, I believe 
+my implementation of entropy-based discretization is correct, but I know for a fact that I'm not
+binning continuous values into more than 2 bins since Preprocessor.discretize_by_entropy() doesn't
+call itself again on a partitions made by optimal splits.

@@ -1,0 +1,30 @@
+package preprocessing;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+
+import containers.Triple;
+import tools.Loader;
+
+public class DocumentPreprocessor {
+	
+	private HashMap<String, String> rawDocuments;
+	private DocumentPrepper prepper;
+	private DocumentNormalizer normalizer;
+	
+	private HashMap<String, LinkedList<Triple>> tokenizedDocuments;
+	
+	public DocumentPreprocessor() {
+		HashMap<String, String> rawDocuments = new Loader().loadRawDocuments();
+		
+		System.out.println("Number of raw documents: " + rawDocuments.size());
+		
+		DocumentPrepper prepper = new DocumentPrepper();
+		DocumentNormalizer normalizer = new DocumentNormalizer();
+		
+		for (String docNo : rawDocuments.keySet()) {
+			String docText = rawDocuments.get(docNo);
+			
+		}
+	}
+}

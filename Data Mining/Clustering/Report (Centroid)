@@ -1,0 +1,82 @@
+k = 5 (Centroid Distance)
+Time: 44.2
+
+Sum Squared Error: 814477.6504011572
+Min Cluster Distance: 3.315967129843522
+Max Cluster Distance: 5.234603778576002
+
+Min Cluster Size: 4
+Max Cluster Size: 44506
+Average Cluster Size: 11179.25
+
+Accuracy: 0.7760806851980231
+Macro Average Precision: 0.6973739108403827
+Micro Average Precision: 0.7760806851980231
+
+--------------------------------------------
+
+k = 10 (Centroid Distance) - BEST RUN
+Time: 47.7
+
+Sum Squared Error: 895995.7589355629
+Min Cluster Distance: 3.3416810896629867
+Max Cluster Distance: 6.5617738508183505
+
+Min Cluster Size: 1
+Max Cluster Size: 44506
+Average Cluster Size: 4968.555555555556
+
+Accuracy: 0.7783393340340363
+Macro Average Precision: 0.8736761674890294
+Micro Average Precision: 0.7783393340340363
+
+--------------------------------------------
+
+k = 15 (Centroid Distance)
+Time: 47.9
+
+Sum Squared Error: 965695.3045944739
+Min Cluster Distance: 2.8493016262848023
+Max Cluster Distance: 7.11179258817209
+
+Min Cluster Size: 1
+Max Cluster Size: 44506
+Average Cluster Size: 3194.0714285714284
+
+Accuracy: 0.7782275197352237
+Macro Average Precision: 0.8181509393441736
+Micro Average Precision: 0.7782275197352237
+
+--------------------------------------------
+
+k = 20 (Centroid Distance) - BEST RUN
+Time: 50.7
+
+Sum Squared Error: 934995.9576170825
+Min Cluster Distance: 2.946129651827273
+Max Cluster Distance: 6.358170525840239
+
+Min Cluster Size: 1
+Max Cluster Size: 44506
+Average Cluster Size: 2353.5263157894738
+
+Accuracy: 0.7780933425766487
+Macro Average Precision: 0.814692663818506
+Micro Average Precision: 0.7780933425766487
+
+--------------------------------------------
+
+k = 25 (Centroid Distance)
+Time: 53.9
+
+Sum Squared Error: 639877.1655096854
+Min Cluster Distance: 2.735330724903714
+Max Cluster Distance: 7.329045270649478
+
+Min Cluster Size: 1
+Max Cluster Size: 44506
+Average Cluster Size: 1863.2083333333333
+
+Accuracy: 0.7774448196435361
+Macro Average Precision: 0.9260100594010628
+Micro Average Precision: 0.7774448196435361

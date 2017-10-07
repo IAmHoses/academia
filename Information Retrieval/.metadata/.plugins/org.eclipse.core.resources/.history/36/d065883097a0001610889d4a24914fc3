@@ -1,0 +1,35 @@
+package preprocessing;
+
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import containers.Query;
+import tools.Loader;
+
+public class Preprocessor {
+	private String testKey = "265";
+	private HashMap<String, Query> queries;
+	
+	public Preprocessor() {
+		queries = new Loader().loadQueries("QueryFile/queryfile.txt");
+	}
+	
+	public HashMap<String, Query> queries() {
+		return queries;
+	}
+	
+	public void preprocess() {
+		QueryPrepper queryPrepper = new QueryPrepper();
+		QueryNormalizer queryNormalizer = new QueryNormalizer();
+		
+		for (String key : queries.keySet()) {
+			Query query = queries.get(key);
+			
+			query = queryPrepper.prepare(query);
+			query = queryNormalizer.normalize(query);
+			
+			queries.replace(key, query);
+		}
+	}
+}

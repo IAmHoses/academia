@@ -1,0 +1,185 @@
+package dynamic_ranking;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
+import containers.PositionalPostingList;
+import containers.PostingList;
+import containers.Query;
+import containers.Score;
+import tools.ScoreComparator;
+
+public class DynamicBM25 {
+	private HashMap<String, PostingList> phraseIndex;
+	private HashMap<String, PositionalPostingList> positionalIndex;
+	private HashMap<String, Query> phraseQueries;
+	private HashMap<String, Query> positionalQueries;
+	private Set<String> phraseDocuments;
+	private Set<String> positionalDocuments;
+	
+	private int N_phraseIndex;	// number of documents in phrase index
+	private int N_positionalIndex;	// number of documents in positional index
+	private HashMap<String, Double> d_squares;
+	private HashMap<String, Double> w_squares;
+	
+	public DynamicBM25(HashMap<String, PostingList> _phraseIndex, HashMap<String, PositionalPostingList> _positionalIndex, 
+			HashMap<String, Query> _phraseQueries, HashMap<String, Query> _positionalQueries, 
+			Set<String> phraseDocs, Set<String> positionalDocs) {
+		
+		System.out.println("Inside DynamicBM25 constructor");
+		
+		phraseIndex = _phraseIndex;
+		positionalIndex = _positionalIndex;
+		phraseQueries = _phraseQueries;
+		positionalQueries = _positionalQueries;
+		phraseDocuments = phraseDocs;
+		positionalDocuments = positionalDocs;
+		
+		N_phraseIndex = phraseDocuments.size();
+		N_positionalIndex = positionalDocuments.size();
+		
+		d_squares = new HashMap<String, Double>();
+		w_squares = new HashMap<String, Double>();
+		
+		System.out.println(phraseQueries.size());
+	}
+	
+	public void launch() {
+		determineIndexConfig(0);
+//		compute_idfs();
+//		compute_d_squares();
+//		compute_q_squares();
+//		generateCosineMeasureOutput();
+	}
+	
+	public void determineIndexConfig(int threshold) {
+		for (String queryNum : phraseQueries.keySet()) {
+			
+			int df_sum = 0;
+			Query query = phraseQueries.get(queryNum);
+			
+			for (String token : query.tokens().keySet()) {
+				if (phraseIndex.containsKey(token)) {
+					df_sum += phraseIndex.get(token).map().size();
+				}
+			}
+			
+			System.out.println("DF sum for query " + query.number() + ": " + df_sum);
+		}
+	}
+	
+//	public void compute_idfs() {
+//		for (String term : index.keySet()) {
+//			PostingList postingList = index.get(term);
+//			postingList.compute_vsm_idf(N);
+//			index.replace(term, postingList);
+//		}
+//	}
+//	
+//	public void compute_d_squares() {
+//		for (String term: index.keySet()) {
+//			PostingList postingList = index.get(term);	// grab posting list for current term
+//			
+//			for (String docNo : documents) {
+//				if (postingList.map().containsKey(docNo)) {
+//					if (!d_squares.containsKey(docNo)) {
+//						d_squares.put(docNo, Math.pow(postingList.map().get(docNo).tf(), 2));
+//					} else {
+//						d_squares.replace(docNo, d_squares.get(docNo) + Math.pow(postingList.map().get(docNo).tf(), 2));
+//					}
+//				}
+//			}
+//		}
+//	}
+//	
+//	public void compute_q_squares() {
+//		for (String queryNum : queries.keySet()) {
+//			Query query = queries.get(queryNum);
+//			
+//			double w_square_sum = 0;
+//			for (String token : query.tokens().keySet()) {
+//				if (!index.containsKey(token)) {
+//					continue;
+//				}
+//				
+//				w_square_sum += Math.pow(query.tokens().get(token).tf() * index.get(token).idf(), 2);
+//			}
+//			w_squares.put(queryNum, w_square_sum);
+//		}
+//	}
+//	
+//	public void generateCosineMeasureOutput() {
+//		String output = "";
+//		
+//		for (String queryNum : queries.keySet()) {
+//			Query query = queries.get(queryNum);
+//			
+//			Score[] scores = new Score[N];
+//			int i = 0;
+//			
+//			for (String docNo : documents) {
+//				double dotProduct = 0;
+//				
+//				for (String token : query.tokens().keySet()) {
+//					if (!index.containsKey(token)) {
+//						continue;
+//					}
+//					
+//					PostingList postingList = index.get(token);	// grab posting list for current token
+//					
+//					if (postingList.map().containsKey(docNo)) {	// posting list for token has a mapping for the document in question
+//						double w = postingList.map().get(docNo).tf() * postingList.idf();
+//						double d = postingList.map().get(docNo).tf();
+//						
+//						dotProduct += w * d;
+//					}
+//				}	
+//				double score = dotProduct / (Math.sqrt(d_squares.get(docNo) * w_squares.get(queryNum)));
+//				
+//				if (String.valueOf(score)!= "NaN" && score != 0) {
+//					scores[i] = new Score(score, query.number(), docNo);
+//					i++;
+//				}
+//			}
+//		    List<Score> list = new ArrayList<Score>(Arrays.asList(scores));
+//		    list.removeAll(Collections.singleton(null));
+//		    scores = list.toArray(new Score[list.size()]);
+//			
+//			Arrays.sort(scores, new ScoreComparator());
+//			
+//			int indexUpperLimit;
+//			
+//			if (scores.length > 100) {
+//				indexUpperLimit = 100;
+//			} else {
+//				indexUpperLimit = scores.length;
+//			}
+//			
+//			for (int j = 0; j < indexUpperLimit; j++) {
+//				output += scores[j].queryNumber() + " 0 " + scores[j].documentNumber() + " " + (j+1) + " " + scores[j].score() + " COSINE\n";
+//			}
+//		}
+//		
+//		// NOW WRITE THAT SHIT :D
+//		
+//		Path path = Paths.get("Results/cosine.txt");
+//		try {
+//			BufferedWriter bw = Files.newBufferedWriter(path, StandardOpenOption.CREATE);
+//			bw.write(output);
+//			bw.close();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+}

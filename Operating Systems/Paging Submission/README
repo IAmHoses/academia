@@ -1,0 +1,24 @@
+-------------------------------------------
+	(COMPILING AND) EXECUTING THE CODE	
+-------------------------------------------
+
+All of my program's source code can be found in /home/mah343/mah343-paging-src/. If you wish to recompile my program, you can do so with the following command sequence template:
+
+cd /home/mah343/mah343-paging
+touch <compilation output file>
+g++ -std=c++11 mah343-paging-src/*.cpp -o <compilation output file>
+gzcat ~clay/<trace file> | ./<compilation output file> <RAM frames> <algorithm> [verbose]
+
+For instance, to compile and test my program on the server, I used the following command sequence:
+
+cd /home/mah343/mah343-paging
+touch mah343
+g++ -std=c++11 mah343-paging-src/*.cpp -o mah343
+gzcat ~clay/gpp.gz | ./mah343 50 FIFO verbose
+
+If you'd like, you can check out paging.sh in my submission directory (on mclovin: /home/mah343/mah343-paging/). Running that shell script will result in a new compilation of mah343 being placed in my submission directory, followed by the program executing the uncommented runs following the compilation sequence in paging.sh. After logging into mclovin, the following command sequence could be used instead of the one described above:
+
+/home/mah343/mah343-paging
+sh paging.sh
+
+Note that you will have to edit paging.sh to execute runs using different command line arguments; nowever, once the program is compiled, you can simply use the command line to execute subsequent runs instead of recompiling with paging.sh every time.

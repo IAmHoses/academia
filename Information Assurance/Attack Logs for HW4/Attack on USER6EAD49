@@ -1,0 +1,6 @@
+clay b9f195c5cc7ef6afadbfbc42892ad47d3b24c6bc94bb51c4564a9a14e8b799 = swordfish
+AzureDiamond f52fbd32b2b3b86ff88ef6c490628285f482af15ddcb29541f94bcf526a3f6c7 = hunter2
+zita b26387321c9e57cbe857d672eae9f28b5cc13fd9ce5a5f078ab8478a2f32727 = zita
+
+Passwords were pretty good for this user. I was only able to obtain the password for zita 
+because her password was zita, and hence, susceptible to a dictionary attack

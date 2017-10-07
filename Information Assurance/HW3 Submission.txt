@@ -1,0 +1,85 @@
+Marc Hosecloth (mah343) Homework 2 Submission
+
+Password cracker used: John the Ripper
+Password file attacked: "A unix password file" (first link)
+
+Where John the Ripper ran: my computer, not on the server
+How long John the Ripper ran: 10 minutes exactly
+
+List of cracked passwords:
+
+lauran:ferrari1:1112:100:lauran sebastian:/usr/home/lauran:/bin/tcsh
+millard:changeme:2791:100:millard seals:/usr/home/millard:/bin/tcsh
+hilario:snoopy:1163:100:hilario brownell:/usr/home/hilario:/bin/tcsh
+vickie:welcome1:2921:100:vickie clem:/usr/home/vickie:/bin/tcsh
+dorene:awesome2:2881:100:dorene fredericks:/usr/home/dorene:/bin/tcsh
+velda:a1b2c3d4:1711:100:velda roberge:/usr/home/velda:/bin/tcsh
+lawanda:lizard:2545:100:lawanda ontiveros:/usr/home/lawanda:/bin/tcsh
+dahlia:password:2082:100:dahlia alford:/usr/home/dahlia:/bin/tcsh
+pasty:london:2149:100:pasty hankins:/usr/home/pasty:/bin/tcsh
+yuri:frances:1098:100:yuri hooks:/usr/home/yuri:/bin/tcsh
+kathi:password:2502:100:kathi latta:/usr/home/kathi:/bin/tcsh
+tommy:Shanghai:1453:100:tommy snipes:/usr/home/tommy:/bin/tcsh
+lionel:linda12:1378:100:lionel fife:/usr/home/lionel:/bin/tcsh
+donovan:abcd1234:2871:100:donovan bowens:/usr/home/donovan:/bin/tcsh
+ariel:sigma1:2196:100:ariel mace:/usr/home/ariel:/bin/tcsh
+silas:PASSWORD:2024:100:silas durbin:/usr/home/silas:/bin/tcsh
+ty:welcome!:1936:100:ty abbott:/usr/home/ty:/bin/tcsh
+stevie:1qaz2wsx:2805:100:stevie roche:/usr/home/stevie:/bin/tcsh
+katlyn:cather12:1756:100:katlyn turnage:/usr/home/katlyn:/bin/tcsh
+brittani:toshiba6:1899:100:brittani mcadams:/usr/home/brittani:/bin/tcsh
+agueda:12345678:2875:100:agueda roland:/usr/home/agueda:/bin/tcsh
+eda:changeme:2748:100:eda brandenburg:/usr/home/eda:/bin/tcsh
+robbin:paladin1:2123:100:robbin hoag:/usr/home/robbin:/bin/tcsh
+susana:cracker2:1843:100:susana chau:/usr/home/susana:/bin/tcsh
+freddie:jelly1:2155:100:freddie tobias:/usr/home/freddie:/bin/tcsh
+chandra:abcd1234:1283:100:chandra campbell:/usr/home/chandra:/bin/tcsh
+marline:luna23:2649:100:marline neville:/usr/home/marline:/bin/tcsh
+erma:passw0rd:2928:100:erma schwarz:/usr/home/erma:/bin/tcsh
+joi:mina95:2763:100:joi chapin:/usr/home/joi:/bin/tcsh
+
+1137 passwords in file, 29 password hashes cracked, 1108 left
+
+Status line of attack at 10-minute mark:
+29g 0:00:10:00  3/3 0.04825g/s 8769p/s 4550Kc/s 5206KC/s 03449d..03925r
+
+-----------------------------------------------------------------------------
+
+a. (26ˆ8 passwords)/(8769 passwords/second) = 9.06 months
+
+b. (52ˆ8 passwords)/(8769 passwords/second) = 193.32 years
+
+c. (62ˆ8 passwords)/(8769 passwords/second) = 789.54 years
+
+d. (94ˆ8 passwords)/(8769 passwords/second) = 22042.77 years
+
+e. (1137 guesses)/(0.04825 guesses/second) = 6.55 hours
+
+f. (29 guesses/1137 in password file) * (10000 GU users) = 255 weak passwords
+
+	// for g-j, 11 hash cars, 2 salt chars, and 2 formatting chars per record
+
+g. (26ˆ2 salts)(26ˆ8 passwords)(13 chars/record) = 1.8352 * 10ˆ15 chars in file
+	((1.8352 * 10ˆ15 chars in file)(4 bytes/char)) = 6676.32 TB
+
+h. (52ˆ2 salts)(52ˆ8 passwords)(13 chars/record) = 7.5169 * 10ˆ18 chars in file
+	((1.8352 * 10ˆ15 chars in file)(4 bytes/char)) = 6.8365 * 10ˆ6 TB
+
+i. (62ˆ2 salts)(62ˆ8 passwords)(13 chars/record) = 4.3644 * 10ˆ19 chars in file
+	((1.8352 * 10ˆ15 chars in file)(4 bytes/char)) = 3.9694 * 10ˆ7 TB
+
+j. (94ˆ2 salts)(94ˆ8 passwords)(13 chars/record) = 1.8352 * 10ˆ21 chars in file
+	((1.8352 * 10ˆ15 chars in file)(4 bytes/char)) = 2.5473 * 10ˆ9 TB
+
+k. (26ˆ8 passwords)/(2ˆ128 keys) = 6.14 * 10ˆ-28 percent of key space
+
+l. (52ˆ8 passwords)/(2ˆ128 keys) = 1.57 * 10ˆ-25 percent of key space
+
+m. (62ˆ8 passwords)/(2ˆ128 keys) = 6.42 * 10ˆ-25 percent of key space
+
+n. (94ˆ8 passwords)/(2ˆ128 keys) = 1.79 * 10ˆ-23 percent of key space
+
+o. (94ˆ12 passwords)/(2ˆ128 keys) = 1.4 * 10ˆ-15 percent of key space
+
+p. (94ˆ15 passwords)/(2ˆ128 keys) = 1.16 * 10ˆ-9 percent of key space
+

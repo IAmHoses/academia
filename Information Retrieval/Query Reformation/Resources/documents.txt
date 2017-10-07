@@ -1,0 +1,11 @@
+Documents/fr940104-0.txt
+Documents/fr940104-2.txt
+Documents/fr940128-2.txt
+Documents/fr940303-1.txt
+Documents/fr940405-1.txt
+Documents/fr940525-0.txt
+Documents/fr940617-2.txt
+Documents/fr940810-0.txt
+Documents/fr940810-2.txt
+Documents/fr941006-1.txt
+Documents/fr941206-1.txt

@@ -1,0 +1,8 @@
+package containers;
+
+import java.util.HashMap;
+
+public class PostingList {
+	private float idf;
+	private HashMap<String, Triple> list;	// K = DOCNO, V = Triple
+}

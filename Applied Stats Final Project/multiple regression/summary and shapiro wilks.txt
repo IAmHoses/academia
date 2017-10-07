@@ -1,0 +1,30 @@
+> summary(final.multiple)
+
+Call:
+lm(formula = log(final$Infant.Mortality) ~ final$GDP.per.Capita +
+    final$Sanitation + final$Urban, data = final)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-1.24814 -0.31837  0.01848  0.32058  1.53157
+
+Coefficients:
+                       Estimate Std. Error t value Pr(>|t|)
+(Intercept)           4.757e+00  1.279e-01  37.196  < 2e-16 ***
+final$GDP.per.Capita -2.284e-05  2.818e-06  -8.106 1.09e-13 ***
+final$Sanitation     -2.079e-02  1.691e-03 -12.295  < 2e-16 ***
+final$Urban          -4.706e-03  2.237e-03  -2.104   0.0369 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.508 on 166 degrees of freedom
+Multiple R-squared:  0.7837,	Adjusted R-squared:  0.7798
+F-statistic: 200.5 on 3 and 166 DF,  p-value: < 2.2e-16
+
+
+> shapiro.test(final.multiple$residuals)
+
+	Shapiro-Wilk normality test
+
+data:  final.multiple$residuals
+W = 0.99452, p-value = 0.7822

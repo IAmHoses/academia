@@ -1,0 +1,34 @@
+package preprocessing;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+
+public class DocumentPrepper {
+	
+	public String prepare(String rawDoc) {
+		rawDoc = clean(rawDoc);
+		
+		return rawDoc;
+	}
+	
+	public String clean(String rawDoc) {
+		
+		rawDoc = rawDoc.replaceAll("&hyph;", "-");
+		rawDoc = rawDoc.replaceAll("&blank;", " ");
+		rawDoc = rawDoc.replaceAll("&cir;", "");
+
+		Pattern HTML4_Pattern = Pattern.compile("&[a-z]+;");
+		Matcher HTML4_Matcher = HTML4_Pattern.matcher(rawDoc);
+		
+		while (HTML4_Matcher.find()) {
+			rawDoc = HTML4_Matcher.replaceAll(" " + HTML4_Matcher.group(0) + " ");
+		}
+		
+		rawDoc = StringEscapeUtils.unescapeHtml4(rawDoc);
+		rawDoc = rawDoc.replaceAll("§", "");
+		
+		return rawDoc;
+	}
+}

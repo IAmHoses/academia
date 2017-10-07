@@ -1,0 +1,10 @@
+package preprocessing;
+
+public class DocumentPrepper {
+	
+	public String prep(String rawDoc) {
+		
+		
+		return rawDoc;
+	}
+}

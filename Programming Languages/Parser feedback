@@ -1,0 +1,9 @@
+x + (2 + 4) is broken
+be wary with how you return shit. "function" shouldn't be be a keyword. Rather, you're saying:
+	fundef z = foo(a, b) a + b endfun
+
+	Where z is the value of a PASSED VARIABLE to be assigned the return value of foo
+
+classdef Foo member1 = 0; fundef z = function(b,c,d) y = 3+4; endfun endclass
+
+x.set('member1', 10); => string in this case <- or list breaks the code

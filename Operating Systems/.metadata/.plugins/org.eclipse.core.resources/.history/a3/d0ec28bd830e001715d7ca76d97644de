@@ -1,0 +1,28 @@
+package scheduling;
+
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Comparator;
+
+public class ShortestJobFirst {
+	LinkedList<Process> processes;
+	PriorityQueue<Process> processHeap;
+	Integer totalTime;
+	Integer averageBurstTime;
+	
+	public ShortestJobFirst (LinkedList<Process> processes) {
+		this.processes = processes;
+		totalTime = 0;
+		averageBurstTime = 0;
+	}
+	
+	class ShortestJobFirstComparator implements Comparator<Process> {
+		@Override
+		public int compare(Process o1, Process o2) {
+			
+			
+			return 0;
+		}
+		
+	}
+}

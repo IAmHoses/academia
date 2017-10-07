@@ -1,0 +1,154 @@
+package ranking;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
+
+import containers.PostingList;
+import containers.Query;
+import containers.Triple;
+import exceptions.QueryReformationConfigException;
+import preprocessing.DocumentPreprocessor;
+import preprocessing.QueryPreprocessor;
+import tools.Loader;
+import tools.N_IDF_Comparator;
+
+public class Ranker {
+	private HashMap<String, PostingList> index;
+	private HashMap<String, Query> queries;
+	private Set<String> documentNumbers;
+	private String resultsDirectory;
+	
+	private String queryReformationConfiguration;
+	private HashMap<String, Triple[]> tokenizedDocuments;
+	
+	// parameters: index configuration and pre=processed queries
+	public Ranker(String indexPath, String queryPath, String resultsDir, String queryReformationConfig) throws QueryReformationConfigException {
+		queryReformationConfiguration = queryReformationConfig;
+		
+		boolean longQueries;
+		
+		if (queryReformationConfiguration.equals("expand")) {
+			longQueries = false;
+		}
+		else if (queryReformationConfiguration.equals("reduce") || queryReformationConfiguration.equals("hybrid")) {
+			longQueries = true;
+		}
+		else {
+			throw new QueryReformationConfigException("Invalid query reformation configuration: " + queryReformationConfiguration);
+		}
+		
+		index = new Loader().loadIndex(indexPath);
+		queries = new QueryPreprocessor(queryPath, longQueries).preprocess();
+		documentNumbers = gatherDocumentNumbers();
+		resultsDirectory = resultsDir;
+		
+		compute_idfs(documentNumbers.size());
+	}
+	
+	public Set<String> gatherDocumentNumbers() {
+		Set<String> docNumbers = new HashSet<String>();
+		for (String term : index.keySet()) {
+			PostingList postingList = index.get(term);
+			
+			for (String DocNo : postingList.map().keySet()) {
+				if (docNumbers.contains(DocNo)) {
+					continue;
+				} else {
+					docNumbers.add(DocNo);
+				}
+			}
+		}
+		return docNumbers;
+	}
+	
+	public void compute_idfs(int N) {
+		for (String term : index.keySet()) {
+			PostingList postingList = index.get(term);
+			postingList.compute_idf(N);
+			index.replace(term, postingList);
+		}
+	}
+	
+	
+	public void rank() {
+		if (queryReformationConfiguration.equals("expand")) {
+			expand(5, 2);
+		}
+		
+		if (queryReformationConfiguration.equals("reduce")) {
+			reduce(.25);
+		}
+	}
+	
+	public void expand(int n, int r) {
+		HashMap<String, LinkedList<String>> relDocLists = new BM25(index, queries, documentNumbers, resultsDirectory).BM25();
+		tokenizeAndSortDocuments();
+		expandQueries(n, r, relDocLists);
+		new BM25(index, queries, documentNumbers, resultsDirectory).BM25();
+	}
+	
+	public void tokenizeAndSortDocuments() {
+		tokenizedDocuments = new DocumentPreprocessor().preprocess();
+		
+		for (String docNo : tokenizedDocuments.keySet()) {
+			Triple[] tokenizedDoc = tokenizedDocuments.get(docNo);
+			
+			for (int i = 0; i < tokenizedDoc.length; i++) {
+				Triple token = tokenizedDoc[i];
+				
+				if (index.containsKey(token.term())) {
+					token.set_n_idf(index.get(token.term()).n_idf());
+				} else {
+					token.set_n_idf(0);
+				}
+			}
+			
+			Arrays.sort(tokenizedDoc, new N_IDF_Comparator());
+			
+//			for (int i = 0; i < tokenizedDoc.length; i++) {
+//				System.out.println(tokenizedDoc[i].term() + " --> " + tokenizedDoc[i].n_idf());
+//			}
+			
+			tokenizedDocuments.replace(docNo, tokenizedDoc);
+		}
+	}
+	
+	public void expandQueries(int n, int r, HashMap<String, LinkedList<String>> relDocLists) {
+		for (String queryNo : relDocLists.keySet()) {
+			Query query = queries.get(queryNo);
+			LinkedList<String> relDocs = relDocLists.get(queryNo);
+			
+			System.out.println("Size of query string before expansion: " + query.tokens().size());
+			
+			for (int i = 0; i < n; i++) {
+				if (relDocs.size() > 0) {
+					String relDocNo = relDocs.pop();
+					Triple[] relDoc = tokenizedDocuments.get(relDocNo);
+					
+					int upperBound;
+					
+					if (r < relDoc.length) {
+						upperBound = r;
+					} else {
+						upperBound = relDoc.length;
+					}
+					
+					for (int j = 0; j < upperBound; j++) {
+						query.saveToken(relDoc[j].term());
+					}
+				}
+			}
+			System.out.println("Size of query string after expansion: " + query.tokens().size());
+			
+			queries.replace(queryNo, query);
+		}
+	}
+	
+	public void reduce(double threshold) {
+		
+	}
+}
+

@@ -1,0 +1,115 @@
+package scheduling;
+
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Comparator;
+
+public class ShortestJobFirst {
+	LinkedList<Process> processes;
+	Integer totalTime;
+	Integer burstTime;
+	Integer numOfBursts;
+	Integer averageBurstTime;
+	PriorityQueue<Process> processHeap;
+	
+	public ShortestJobFirst (LinkedList<Process> processes) {
+		this.processes = processes;
+		totalTime = 0;
+		burstTime = 0;
+		numOfBursts = 0;
+		averageBurstTime = 0;
+		
+		processHeap = new PriorityQueue<Process>(new ShortestJobFirstComparator());
+		
+		for (Process process : processes) {
+			processHeap.add(process);
+		}
+	}
+	
+	public void schedule () {
+		while (!processHeap.isEmpty()) {
+			startArrivingProcesses();
+			
+			Process currentProcess = processHeap.poll();
+			
+			while (!currentProcess.isFinished()) {
+				
+				if (currentProcess.getSubprocesses().getFirst().getType().equals("B")) {	// add burst time
+					updateBurstTimeAverage(currentProcess.getSubprocesses().getFirst().getTime());
+				}
+				
+				totalTime = currentProcess.subtractTime(totalTime, averageBurstTime);
+				
+				if (!currentProcess.isFinished()) {
+					processHeap.add(currentProcess);
+				}
+				
+			}
+		}
+	}
+	
+	public void updateBurstTimeAverage (Integer newBurst) {
+		burstTime += newBurst;
+		numOfBursts++;
+		averageBurstTime = burstTime / numOfBursts;
+	}
+	
+	private void startArrivingProcesses () {
+		for (Process process : processHeap) {
+			if (totalTime >= process.getStartTime()) {
+				process.start();
+				
+				if (process.getSubprocesses().getFirst().getType().equals("I")) {
+					process.sleep();
+				}
+			}
+		}
+	}
+	
+	class ShortestJobFirstComparator implements Comparator<Process> {
+		@Override
+		public int compare(Process p1, Process p2) {
+			
+			if (p1.hasStarted() && !p2.hasStarted()) {
+				return -1;
+			}
+			
+			else if (!p1.hasStarted() && p2.hasStarted()) {
+				return 1;
+			}
+			
+			else if (p1.hasStarted() && p2.hasStarted()) {
+				Subprocess p1Head = p1.getSubprocesses().getFirst();
+				Subprocess p2Head = p2.getSubprocesses().getFirst();
+				
+				if (p1Head.getType().equals("B") && p2Head.getType().equals("B") ||
+						(p1Head.getType().equals("I") && p2Head.getType().equals("I"))) {
+					
+					if (p1Head.getTime() < p2Head.getTime()) {
+						return -1;
+					}
+					else if (p1Head.getTime() > p2Head.getTime()) {
+						return 1;
+					}
+					else {
+						return 0;	
+					}
+				}
+				
+				if (p1Head.getType().equals("B") && p2Head.getType().equals("I")) {
+					return -1;
+				}
+				
+				if (p1Head.getType().equals("I") && p2Head.getType().equals("B")) {
+					return 1;
+				}	
+			}
+			
+			else {
+				return 0;
+			}
+			
+			return 0;
+		}
+	}
+}

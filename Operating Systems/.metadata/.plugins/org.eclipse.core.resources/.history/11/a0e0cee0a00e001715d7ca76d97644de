@@ -1,0 +1,72 @@
+package scheduling;
+
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+
+public class ShortestJobFirst {
+	private PriorityQueue<Process> processHeap;
+	private Boolean verboseEnabled;
+	private Integer totalTime;
+	private Integer burstTime;
+	private Integer numOfBursts;
+	private Integer averageBurstTime;
+	
+	public ShortestJobFirst (LinkedList<Process> processes, Boolean verboseEnabled) {
+		processHeap = new PriorityQueue<Process>(new ShortestJobComparator());
+		
+		for (Process process : processes) {
+			processHeap.add(process);
+		}
+		
+		this.verboseEnabled = verboseEnabled;
+		
+		totalTime = 0;
+		burstTime = 0;
+		numOfBursts = 0;
+		averageBurstTime = 0;
+	}
+	
+	public void schedule () {
+		while (!processHeap.isEmpty()) {
+			startArrivingProcesses();
+			
+			Process currentProcess = processHeap.poll();
+			
+			while (!currentProcess.isFinished()) {
+				
+				if (currentProcess.getSubprocesses().getFirst().getType().equals("B")) {	// add burst time
+					updateBurstTimeAverage(currentProcess.getSubprocesses().getFirst().getTime());
+				}
+				
+				if (verboseEnabled) {
+					System.out.println("Burst time for current process: " + averageBurstTime);
+				}
+				
+				totalTime = currentProcess.subtractTime(totalTime, averageBurstTime);
+				
+				if (verboseEnabled) {
+					System.out.print("");
+				}
+			}
+		}
+		System.out.println("end");
+	}
+	
+	public void updateBurstTimeAverage (Integer newBurst) {
+		burstTime += newBurst;
+		numOfBursts++;
+		averageBurstTime = burstTime / numOfBursts;
+	}
+	
+	private void startArrivingProcesses () {
+		for (Process process : processHeap) {
+			if (totalTime >= process.getStartTime()) {
+				process.start();
+				
+				if (process.getSubprocesses().getFirst().getType().equals("I")) {
+					process.sleep();
+				}
+			}
+		}
+	}
+	}

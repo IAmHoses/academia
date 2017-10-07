@@ -1,0 +1,78 @@
+-----------------------------
+	CROSS-PLATFORM ISSUES	
+-----------------------------
+
+I was unable to get my code to run on mclovin beccause of two cross-plaform issues:
+
+(1) My executable (on mclovin: /home/mah343/mah343-paging/mah343) was compiled on Mac OSX, and hence, would not run on Linux even though the file type is Mach-O 64-bit x86_64 executable and mclovin's machine hardware name is also x86_64. I assume that this issue arose simply because mclovin and my machine are running on two different operating systems. The relevant shell output is below.
+
+
+mah343@mclovin ~/mah343-paging
+ % gzcat ~clay/gpp.gz | ./mah343 50 FIFO verbose
+zsh: exec format error: ./mah343
+
+mah343@mclovin ~/mah343-paging
+% file ~/mah343-paging/mah343
+/home/mah343/mah343-paging/mah343: Mach-O 64-bit x86_64 executable
+
+mah343@mclovin ~/mah343-paging
+ % uname -a
+Linux mclovin 4.4.0-66-generic #87-Ubuntu SMP Fri Mar 3 15:29:05 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux
+
+
+(2) After discovering issue 1, I attempted to move all of my program's source code to mclovin and compile the program there, in hopes that I would be able to compile it on mclovin's system architechture and hence then be able to run it on mclovin. After sftp'ing all of my source code to mclovin, I proceeded to run the following command from my submission directory...
+
+
+mah343@mclovin ~/mah343-paging
+ % touch mah343-new-compilation && g++ ../mah343-paging-src/*.cpp -o mah343-new-compilation
+
+
+ which then produced a myriad of errors relating to the fact that mclovin's version of C++ is not compatible with the version of C++ my source code is written in. Some of the relevant errors are below:
+
+
+In file included from /usr/include/c++/5/unordered_map:35:0,
+                 from ../mah343-paging-src/Page.hpp:12,
+                 from ../mah343-paging-src/OWN.hpp:12,
+                 from ../mah343-paging-src/OWN.cpp:9:
+#error This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options.
+
+../mah343-paging-src/LRU.cpp: In member function ‘void LRU::updateLeastRecentlyUsed(Page*)’:
+../mah343-paging-src/LRU.cpp:98:17: error: ‘nullptr’ was not declared in this scope
+     Page* MRU = nullptr;
+
+../mah343-paging-src/LRU.cpp:213:29: warning: range-based ‘for’ loops only available with -std=c++11 or -std=gnu++11
+     for (const auto& pair : disk) {
+
+../mah343-paging-src/LRU.cpp:57:5: error: ‘unordered_map’ is not a member of ‘std’
+     std::unordered_map<int, Page*>::const_iterator got = disk.find(page->number());
+
+
+These compatibility issues arose from the keyword `nullptr` not being recognized (introduced in C++11), range-based 'for' loops not being understood semanitcally (also introduced in C++11), and <unordered_map> not being a member defined in the std library (again, introduced in C++11).
+
+
+-------------------------------------------
+	(COMPILING AND) EXECUTING THE CODE	
+-------------------------------------------
+
+Due to the issues described above, I was unable to run my code on mclovin, and hence, I was also unable to time my submission's paging runs using the `time` shell command Clay put on mclovin. I did, however, implement a workaround in my source code: timing the runs using the C++ <ctime> library and including the runtime as part of each run's output statistics. If you'd like to run my code on mclovin, I assume the best bet would be looking into updating mclovin such that its g++ compiler is compatible with my source code's C++11 dependencies. However, there are two options that wouldn't require too much effort:
+
+(1) If your local machine can run a C++ app compiled on Mac OSX, you can simply take my compiled submission (on mclovin: /home/mah343/mah343-paging/mah343) and run it on your local machine. Details regarding my local machine's g++ compiler are provided below, followed by an example shell command that resulted in all required functionality and output working properly on my Mac.
+
+Marcs-MacBook-Pro-3:Operating Systems Eidolon$ g++ --version
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/usr/include/c++/4.2.1
+Apple LLVM version 8.0.0 (clang-800.0.42.1)
+Target: x86_64-apple-darwin16.4.0
+Thread model: posix
+InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+
+gzcat gpp.gz | ./mah343 50 FIFO verbose
+
+
+(2) If your local machine's compiler has g++ support for C++11, you can take my submission's source code (on mclovin: /home/mah343/mah343-paging-src/), you can download it to your machine and compile it locally to be run. Below is an example shell command that resulted in proper compilation and execution with the g++ compiler described above
+
+
+touch mah343 && g++ mah343-paging-src/*.cpp -o mah343
+gzcat gpp.gz | ./mah343 50 FIFO verbose
+
+
+If you are still having issues with running my code, I can look into cross-platform compilation between Mac OSX and Linux. Should those efforts result in a compiled executable that will run on mclovin, I will upload it there.

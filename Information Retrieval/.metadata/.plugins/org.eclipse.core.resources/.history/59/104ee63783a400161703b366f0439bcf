@@ -1,0 +1,161 @@
+package dynamic_ranking;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import containers.PositionalPostingList;
+import containers.PostingList;
+import containers.Query;
+import exceptions.IndexConfigException;
+import exceptions.RetrievalModelConfigException;
+import preprocessing.Preprocessor;
+import static_ranking.StaticLanguageModel;
+import static_ranking.StaticProbabilisticModel;
+import static_ranking.StaticRanker;
+import static_ranking.StaticVectorSpaceModel;
+import tools.Loader;
+
+public class DynamicRanker {
+	private HashMap<String, PostingList> singleTermIndex;
+	private HashMap<String, PostingList> stemIndex;
+	private HashMap<String, PostingList> phraseIndex;
+	private HashMap<String, PositionalPostingList> positionalIndex;
+	
+	private HashMap<String, Query> singleTermQueries;
+	private HashMap<String, Query> stemQueries;
+	private HashMap<String, Query> phraseQueries;
+	private HashMap<String, Query> positionalQueries;
+	
+	private Set<String> singleTermDocuments;
+	private Set<String> stemDocuments;
+	private Set<String> phraseDocuments;
+	private Set<String> positionalDocuments;
+	
+	// parameters: index configuration and pre=processed queries
+	public DynamicRanker(String indexDirPath, String queryPath, String resultsPath) {
+		try {
+			Loader loader = new Loader();
+			singleTermIndex = loader.loadStandardIndex("single", indexDirPath);
+			stemIndex = loader.loadStandardIndex("stem", indexDirPath);
+			phraseIndex = loader.loadStandardIndex("phrase", indexDirPath);
+			positionalIndex = loader.loadPositionalIndex("proximity", indexDirPath);
+		} catch (IndexConfigException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		singleTermQueries = new Preprocessor("single").preprocess();
+		stemQueries = new Preprocessor("stem").preprocess();
+		phraseQueries = new Preprocessor("phrase").preprocess();
+		positionalQueries = new Preprocessor("proximity").preprocess();
+		
+		singleTermDocuments = gatherDocuments("single");
+		stemDocuments = gatherDocuments("stem");
+		phraseDocuments = gatherDocuments("phrase");
+		positionalDocuments = gatherDocuments("proximity");
+	}
+	
+	public Set<String> gatherDocuments(String indexConfig) {
+		Set<String> docNumbers = new HashSet<String>();
+		
+		HashMap<String, PostingList> standardIndex = null;
+		HashMap<String, PositionalPostingList> positionalIndex = null;
+		
+		if (indexConfig.equals("single")) {
+			standardIndex = singleTermIndex;
+		}
+		if (indexConfig.equals("stem")) {
+			standardIndex = stemIndex;
+		}
+		if (indexConfig.equals("phrase")) {
+			standardIndex = phraseIndex;
+		}
+		if (indexConfig.equals("proximity")) {
+			positionalIndex = this.positionalIndex;
+		}
+		
+		if (indexConfig == "proximity") {
+			for (String term : positionalIndex.keySet()) {
+				PositionalPostingList postingList = positionalIndex.get(term);
+				
+				for (String DocNo : postingList.map().keySet()) {
+					if (docNumbers.contains(DocNo)) {
+						continue;
+					} else {
+						docNumbers.add(DocNo);
+					}
+				}
+			}
+		} else {
+			for (String term : standardIndex.keySet()) {
+				PostingList postingList = standardIndex.get(term);
+				
+				for (String DocNo : postingList.map().keySet()) {
+					if (docNumbers.contains(DocNo)) {
+						continue;
+					} else {
+						docNumbers.add(DocNo);
+					}
+				}
+			}
+		}
+		return docNumbers;
+	}
+	
+	public void rank() {
+		String finalOutput = "";
+		for (String queryNum : phraseQueries.keySet()) {
+			String index = determineIndexConfig(queryNum, 1);
+			
+			if (index.equals("phrase")) {
+				DynamicStandardBM25 generator = new DynamicStandardBM25(phraseIndex, phraseDocuments);
+				finalOutput += generator.generateBM25Output(phraseQueries.get(queryNum), 1.2, 500, 0.75);
+			} else {
+				DynamicPositionalBM25 generator = new DynamicPositionalBM25(positionalIndex, positionalDocuments);
+				String generatorOutput = generator.generateBM25Output(positionalQueries.get(queryNum), 1.2, 500, 0.75);
+				
+				if (!generatorOutput.equals("")) {
+					finalOutput += generatorOutput;
+				} else {
+					DynamicStandardBM25 backupGenerator = new DynamicStandardBM25(stemIndex, stemDocuments);
+					finalOutput += backupGenerator.generateBM25Output(stemQueries.get(queryNum), 1.2, 500, 0.75);
+				}
+			}
+		}
+		
+		// NOW WRITE THAT SHIT :D
+		
+		Path path = Paths.get("Results/dynamicBM25.txt");
+		try {
+			BufferedWriter bw = Files.newBufferedWriter(path, StandardOpenOption.CREATE);
+			bw.write(finalOutput);
+			bw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public String determineIndexConfig(String queryNum, int df_threshold) {
+		int df_sum = 0;
+		
+		Query query = phraseQueries.get(queryNum);
+		
+		for (String token : query.tokens().keySet()) {
+			if (phraseIndex.containsKey(token)) {
+				df_sum += phraseIndex.get(token).map().size();
+			}
+		}
+		
+		if (df_sum >= df_threshold) {
+			return "phrase";
+		} else {
+			return "proximity";
+		}
+	}
+}

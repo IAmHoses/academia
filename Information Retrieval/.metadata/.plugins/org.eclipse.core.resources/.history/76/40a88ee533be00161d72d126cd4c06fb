@@ -1,0 +1,21 @@
+package preprocessing;
+
+import java.util.HashMap;
+
+import tools.Loader;
+
+public class DocumentPreprocessor {
+	
+	public DocumentPreprocessor() {
+		HashMap<String, String> rawDocuments = new Loader().loadRawDocuments();
+		
+		System.out.println("Number of raw documents: " + rawDocuments.size());
+		
+		DocumentPrepper prepper = new DocumentPrepper();
+		DocumentNormalizer normalizer = new DocumentNormalizer();
+		
+		for (String docNo : rawDocuments.keySet()) {
+			
+		}
+	}
+}

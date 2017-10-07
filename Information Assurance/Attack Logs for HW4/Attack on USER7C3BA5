@@ -1,0 +1,11 @@
+clay txpsegjti = swordfish
+AzureDiamond ivoufs3 = hunter2
+chicken nbeoftt = madness
+taz efwjm = devil
+bang pmvgtfo = olufsen
+
+After taking a look at USER7C3BA5's .cc file, I was able to figure out how her proprietary
+crypto worked from this line of code: encrypted[i] = password[i] +1
+
+Each character of her obfuscated passwords are simply one value up from their plaintext
+counterparts. Hence, I was able to manually decrypt the encrypted passwords

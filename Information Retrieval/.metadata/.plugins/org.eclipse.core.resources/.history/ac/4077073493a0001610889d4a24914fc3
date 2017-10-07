@@ -1,0 +1,20 @@
+package containers;
+
+import java.util.HashMap;
+
+public class PostingList {
+	private float idf;
+	private HashMap<String, Triple> map;	// K = DOCNO, V = Triple
+	
+	public float idf() {
+		return idf;
+	}
+	
+	public HashMap<String, Triple> map() {
+		return list;
+	}
+	
+	public void storeTriple(String DOCNO, Triple triple) {
+		list.put(DOCNO, triple);
+	}
+}

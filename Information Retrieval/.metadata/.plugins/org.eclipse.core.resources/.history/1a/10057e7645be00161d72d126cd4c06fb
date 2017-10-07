@@ -1,0 +1,5 @@
+package tools;
+
+public class N_IDF_Comparator {
+
+}

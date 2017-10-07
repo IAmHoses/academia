@@ -1,0 +1,66 @@
+package ranking;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import containers.PostingList;
+import containers.Query;
+import exceptions.IndexConfigException;
+import exceptions.RetrievalModelConfigException;
+import preprocessing.Preprocessor;
+import tools.Loader;
+
+public class Ranker {
+	private String indexConfiguration;
+	private HashMap<String, PostingList> index;
+	private String retrievalModelConfig;
+	private HashMap<String, Query> queries;
+	private Set<String> documents;
+	private String outputPath;
+	
+	// parameters: index configuration and pre=processed queries
+	public Ranker(String indexConfig, String ret_model_config, String indexDirPath, String queryPath, String resultsPath) {
+		indexConfiguration = indexConfig;
+		try {
+			index = new Loader().loadStandardIndex(indexConfiguration, indexDirPath);
+
+		} catch (IndexConfigException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		retrievalModelConfig = ret_model_config;
+		queries = new Preprocessor(indexConfiguration, queryPath).preprocess();
+		documents = gatherDocuments();
+		
+		outputPath = resultsPath;
+	}
+	
+	public Set<String> gatherDocuments() {
+		Set<String> docNumbers = new HashSet<String>();
+		for (String term : index.keySet()) {
+			PostingList postingList = index.get(term);
+			
+			for (String DocNo : postingList.map().keySet()) {
+				if (docNumbers.contains(DocNo)) {
+					continue;
+				} else {
+					docNumbers.add(DocNo);
+				}
+			}
+		}
+		return docNumbers;
+	}
+	
+	public void rank() throws RetrievalModelConfigException {
+		if (retrievalModelConfig.equals("cosine")) {
+			new StaticVectorSpaceModel(index, queries, documents, outputPath).cosine();
+		} else if (retrievalModelConfig.equals("bm25")) {
+			new BM25(index, queries, documents, outputPath).BM25();
+		} else if (retrievalModelConfig.equals("lm")) {
+			new StaticLanguageModel(index, queries, documents, outputPath).Dirichlet();
+		} else {
+			throw new RetrievalModelConfigException("Invalid retrieval model configuration: " + retrievalModelConfig);
+		}
+	}
+}

@@ -1,0 +1,15 @@
+Analysis
+
+The best run I obtained by accuracy across all runs was k = 20 for single-link distance. However, I found 
+that centroid distance produced the most consistent runs by accuracy. I would assume that this finding 
+comes from centroid distance being the best merging criteria -- because all records are being accounted for 
+in cluster assignment, rather than the closest/farthest records being the link between clusters.
+
+In terms of cluster quality by sum_squared_error, I found that the best run was k = 25 single-link, 
+perhaps because these clusters are grouped by closest distance. For the same reason, I found that 
+the farthest clusters by complete_link resulted in the worst-quality clusters by SSE.
+
+Single-link clusters produced a min_cluster_size of 1 every single time, while complete_link_distance 
+clustering produced a nice distribution of cluster size when k = 5. Overall across all merging criteria, 
+the clusters tended to have one cluster of >40,000 records and the remaining with very few records. I 
+attributed this trend to the dominance of the <50k class label.

@@ -1,0 +1,10 @@
+package preprocessing;
+
+public class DocumentNormalizer {
+	
+	public Document normalize(Document rawDoc) {
+		
+		
+		return rawDoc;
+	}
+}

@@ -1,0 +1,73 @@
+package scheduling;
+
+import java.util.LinkedList;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.IOException;
+
+// all main does is load processes and bootstrap the scheduling algorithm
+
+public class Master { 
+	
+	LinkedList<Process> processes;
+
+	public static void main (String[] args) throws SchedulingAlgorithmArgumentException {
+		if (args[1].equals("RR")) {
+			RoundRobin roundRobin = new RoundRobin(Integer.parseInt(args[2]));
+		}
+		else if (args[1].equals("SJF")) {
+			
+		}
+		else if (args[1].equals("SJR")) {
+			
+		}
+		else {
+			throw new SchedulingAlgorithmArgumentException("Invalid Schduling Algorithm Argument: " + args[1]);
+		}
+	}
+	
+	public Master () {
+		processes = loadProcesses();
+	}
+	
+	private LinkedList<Process> loadProcesses () {
+		LinkedList<Process> processes = new LinkedList<Process>();
+		
+		int processID = 1;
+		
+		while (true) {
+			Path path = Paths.get("process-" + processID + ".txt");
+			Charset charset = Charset.forName("US-ASCII");
+			
+			Process currentProcess = null;
+			
+			try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
+			    String line = null;
+			    while ((line = reader.readLine()) != null) {
+			        String[] splitLine = line.split("\\s+");
+			        
+			        if (splitLine[0].equals("start")) {
+			        	currentProcess = new Process(Integer.parseInt(splitLine[1]));
+			        }
+			        else if (splitLine[0].equals("B") || splitLine[0].equals("I")) {
+			        	Subprocess newSubprocess = new Subprocess(splitLine[0], Integer.parseInt(splitLine[1]));
+			        	currentProcess.addSubprocess(newSubprocess);
+			        }
+			        else {
+			        	break;
+			        }
+			    }
+			} catch (IOException e) {
+			    break;
+			}
+			
+			processes.add(currentProcess);
+			processID++;
+		}
+		
+		return processes;
+	}
+}

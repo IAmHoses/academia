@@ -1,0 +1,118 @@
+package ranking;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
+import containers.PostingList;
+import containers.Query;
+import containers.Score;
+import tools.ScoreComparator;
+
+public class VectorSpaceModel {
+	private HashMap<String, PostingList> index;
+	private HashMap<String, Query> queries;
+	private Set<String> documents;
+	
+	private int N;	// number of documents in index
+	
+	public VectorSpaceModel(HashMap<String, PostingList> _index, HashMap<String, Query> _queries, Set<String> docs) {
+		index = _index;
+		queries = _queries;
+		documents = docs;
+		N = documents.size();
+	}
+	
+	public void cosine() {
+		compute_idfs();
+		generateCosineMeasureOutput();
+	}
+	
+	public void compute_idfs() {
+		for (String term : index.keySet()) {
+			PostingList postingList = index.get(term);
+			postingList.compute_vsm_idf(N);
+			index.replace(term, postingList);
+		}
+	}
+	
+	public void generateCosineMeasureOutput() {
+		String output = "";
+		
+		for (String queryNum : queries.keySet()) {
+			Query query = queries.get(queryNum);
+			
+			Score[] scores = new Score[N];
+			int i = 0;
+			
+			for (String docNo : documents) {
+				double rawDotProduct = 0;
+				double sumSquared_d = 0;
+				double sumSquared_w = 0;
+				
+				for (String token : query.tokens().keySet()) {
+//					System.out.println(token);
+					
+					if (!index.containsKey(token)) {
+						continue;
+					}
+					
+					PostingList postingList = index.get(token);	// grab posting list for current token
+					
+					if (postingList.map().containsKey(docNo)) {	// posting list for token has a mapping for the document in question
+						double w = postingList.map().get(docNo).tf() * postingList.idf();
+						double d = postingList.map().get(docNo).tf();
+						
+						rawDotProduct += w * d;
+						sumSquared_d += Math.pow(d, 2);
+						sumSquared_w += Math.pow(w, 2);
+					}
+				}	
+				double score = rawDotProduct / (Math.sqrt(sumSquared_d * sumSquared_w));
+				
+				if (String.valueOf(score)!= "NaN") {
+					scores[i] = new Score(score, query.number(), docNo);
+					i++;
+				}
+			}
+		    List<Score> list = new ArrayList<Score>(Arrays.asList(scores));
+		    list.removeAll(Collections.singleton(null));
+		    scores = list.toArray(new Score[list.size()]);
+			
+			Arrays.sort(scores, new ScoreComparator());
+			
+			int indexUpperLimit;
+			
+			if (scores.length > 100) {
+				indexUpperLimit = 100;
+			} else {
+				indexUpperLimit = scores.length;
+			}
+			
+			for (int j = 0; j < indexUpperLimit; j++) {
+				output += scores[j].queryNumber() + " 0 " + scores[j].documentNumber() + " " + (j+1) + " " + scores[j].score() + " COSINE\n";
+			}
+		}
+		
+		// NOW WRITE THAT SHIT :D
+		
+		Path path = Paths.get("Results/cosine.txt");
+		try {
+			BufferedWriter bw = Files.newBufferedWriter(path, StandardOpenOption.CREATE);
+			bw.write(output);
+			bw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

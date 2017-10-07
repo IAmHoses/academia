@@ -1,0 +1,38 @@
+---------------------
+Protocol Description
+---------------------
+
+Encryption + make HMAC before sending:
+	Step 1 - hash the preshared confidentiality key, forcing it to be 256 bits long
+
+	Step 2 - randomly generate an initialization vector (IV) using /dev/urandom as a seed source
+
+	Step 3 - pad the plaintext message with arbitrary characters until remaining space in the last AES block size is filled
+
+	Step 4 - encrypt the plaintext message using AES in CBC mode
+
+	Step 5 - pass a concatenation of the IV and encrypted message to the authentication step
+	
+	Step 6 - hash the preshared authentication key, forcing it to be 256 bits long
+	
+	Step 7 - HMAC the concatenated IV and encrypted message, then   concatenate the HMAC's hexidecimal digest with the received IV + encrypted message
+	
+	Step 8 - encode (base64) the concatenation of the HMAC digest, IV, and encrypted message, then transmit final message over network!
+
+
+Decryption + check HMAC after receiving:
+	Step 1 - decode (base64) the received message to produce a concatenation of its HMAC digest, IV, and encrypted message
+	
+	Step 2 - hash the preshared authentication key, forcing it to be 256 bits long
+	
+	Step 3 - extract the HMAC digest from the received message, separating it from the message's concatenated IV and ciphertext
+	
+	Step 4 - before proceeding with protocol, check authenticity by HMAC'ing the received concatenated IV and ciphertext. If the HMAC computed during this step matches the HMAC from the received message, then we're good to go
+	
+	Step 5 - hash the preshared confidentiality key, forcing it to be 256 bits long
+	
+	Step 6 - extract the IV from the concatenated IV and ciphertext
+	
+	Step 7 - decrypt the separated ciphertext with assistance from the normalized confidentiality key and extracted IV
+	Step 8 - Unpad the plaintext message and print it to the recipient's screen
+	
